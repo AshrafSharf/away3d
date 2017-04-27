@@ -1,0 +1,1 @@
+export {View as View3D} from "@awayjs/view";

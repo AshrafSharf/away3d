@@ -1,0 +1,1 @@
+export class ObjectContainer3D {}

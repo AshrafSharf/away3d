@@ -1,0 +1,1 @@
+export {GL_BasicMaterial as ColorMaterial} from "@awayjs/stage"

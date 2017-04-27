@@ -1,0 +1,1 @@
+export {Camera as Camera3D} from "@awayjs/scene";
