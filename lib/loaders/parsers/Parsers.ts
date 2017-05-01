@@ -1,1 +1,5 @@
-export class Parsers {}
+export class Parsers {
+	public static enableAllBundled(){
+		
+	}
+}

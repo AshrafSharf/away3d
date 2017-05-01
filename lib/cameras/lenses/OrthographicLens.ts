@@ -1,1 +1,5 @@
-export class OrthographicLens {}
+export class OrthographicLens {
+	constructor(param1:number){
+		
+	}
+}

@@ -6,6 +6,7 @@ module.exports = {
 	format: 'umd',
 	moduleName: 'AwayjsView',
 	external: [
+		'@as3web/flash',
 		'@awayjs/core',
 		'@awayjs/graphics',
 		'@awayjs/materials',
@@ -16,6 +17,7 @@ module.exports = {
 		'@awayjs/view'
 	],
 	globals: {
+		'@as3web/flash': 'As3webFlash',
 		'@awayjs/core': 'AwayjsCore',
 		'@awayjs/graphics': 'AwayjsGraphics',
 		'@awayjs/materials': 'AwayjsMaterials',
