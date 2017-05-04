@@ -1,2 +1,8 @@
 // should be adapter for billboard
-export {Billboard as Sprite3D} from "@awayjs/scene"
+import {Billboard} from "@awayjs/scene"
+import {Entity} from "./Entity"
+export class Sprite3D extends Entity{
+	constructor(mat:any, param1:number, param2:number){
+		super();
+	}
+}

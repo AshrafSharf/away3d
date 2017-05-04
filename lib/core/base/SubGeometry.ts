@@ -2,6 +2,9 @@ import {TriangleElements} from "@awayjs/graphics"
 export class SubGeometry extends  TriangleElements{
 	public autoDeriveVertexNormals:boolean;
 	public autoDeriveVertexTangents:boolean;
+	public get vertexData():any[]{
+		return [];
+	}
 	public updateVertexData(verts:any){
 
 	}
