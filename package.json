@@ -1,6 +1,6 @@
 {
   "name": "@as3web/away3d",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Typescript classes mimicing the functionality of the away3d package in AS3",
   "main": "bundle/as3web-away3d.umd.js",
   "types": "dist/index.d.ts",
