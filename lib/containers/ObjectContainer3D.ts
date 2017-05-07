@@ -1,19 +1,11 @@
 
-import {DisplayObjectContainer} from "@awayjs/scene"
+import {IDisplayObjectAdapter, DisplayObjectContainer} from "@awayjs/scene"
 import {Vector3D, Matrix3D} from "@awayjs/core"
 import { Scene3D } from "./Scene3D";
 import { Object3D } from "../core/base/Object3D";
-//import { Partition3D } from "../core/partition/Partition3D";
-//import { Object3DEvent } from "../events/Object3DEvent";
-//import { Scene3DEvent } from "../events/Scene3DEvent";
-import {AssetType} from "../library/assets/AssetType";
-//import {IAsset} from "../library/assets/IAsset";
 
 
-import { Event } from "@as3web/flash"
-import { EventBase } from "@awayjs/core"
 
-	/*use namespace arcane*/;
 
 /**
  * Dispatched when the scene transform matrix of the 3d object changes.
@@ -74,223 +66,55 @@ import { EventBase } from "@awayjs/core"
  */
 export class ObjectContainer3D extends Object3D //implements IAsset
 {
-	/** @private */
-	/*arcane*/ _ancestorsAllowMouseEnabled:boolean;
-	/*arcane*/ _isRoot:boolean;
 
-	protected _scene:Scene3D;
-	protected _parent:ObjectContainer3D;
-	protected _sceneTransform:Matrix3D = new Matrix3D();
-	protected _sceneTransformDirty:boolean = true;
-	// these vars allow not having to traverse the scene graph to figure out what partition is set
-	//protected _explicitPartition:Partition3D; // what the user explicitly set as the partition
-	//protected _implicitPartition:Partition3D; // what is inherited from the parents if it doesn't have its own explicitPartition
-	protected _mouseEnabled:boolean;
-	//private _sceneTransformChanged:Object3DEvent;
-	//private _scenechanged:Object3DEvent;
-	private _children:ObjectContainer3D[] = [];
-	private _mouseChildren:boolean = true;
-	private _oldScene:Scene3D;
-	private _inverseSceneTransform:Matrix3D = new Matrix3D();
-	private _inverseSceneTransformDirty:boolean = true;
-	private _scenePosition:Vector3D = new Vector3D();
-	private _scenePositionDirty:boolean = true;
-	private _explicitVisibility:boolean = true;
-	private _implicitVisibility:boolean = true;
-	private _listenToSceneTransformChanged:boolean;
-	private _listenToSceneChanged:boolean;
-	// visibility passed on from parents
-
-	protected _ignoreTransform:boolean = false;
-
+	public get adaptee():DisplayObjectContainer
+	{
+		return (<DisplayObjectContainer>this._adaptee);
+	}
+	public set adaptee(value:DisplayObjectContainer)
+	{
+		this._adaptee=value;
+	}
 	/**
 	 * Does not apply any transformations to this object. Allows static objects to be described in world coordinates without any matrix calculations.
 	 */
 	public get ignoreTransform():boolean
 	{
-		return this._ignoreTransform;
+		//todo
+		return false;
 	}
 
 	public set ignoreTransform(value:boolean)
 	{
-		this._ignoreTransform = value;
-		this._sceneTransformDirty = !value;
-		this._inverseSceneTransformDirty = !value;
-		this._scenePositionDirty = !value;
-
-		if (!value) {
-			this._sceneTransform.identity();
-			this._scenePosition.setTo(0, 0, 0);
-		}
+		//todo
 	}
 
-	/**
-	 * @private
-	 * The space partition used for this object, possibly inherited from its parent.
-	 */
-	/*arcane*/
-	/*get implicitPartition():Partition3D
-{
-	return this._implicitPartition;
-}
-*/
-	/*arcane*/ /*set implicitPartition(value:Partition3D)
-{
-	if (value == this._implicitPartition)
-		return;
-
-	var i:number;
-	var len:number = this._children.length;
-	var child:ObjectContainer3D;
-
-	this._implicitPartition = value;
-
-	while (i < len) {
-		child = this._children[i++];
-
-		// assign implicit partition if no explicit one is given
-		if (!child._explicitPartition)
-			child.implicitPartition = value;
-	}
-}*/
-
-	/** @private */
-	/*arcane*/ get isVisible():boolean
-{
-	return this._implicitVisibility && this._explicitVisibility;
-}
-
-	/** @private */
-	/*arcane*/ setParent(value:ObjectContainer3D):void
-{
-	this._parent = value;
-
-	this.updateMouseChildren();
-
-	if (value == null) {
-		this.scene = null;
-		return;
-	}
-
-	this.notifySceneTransformChange();
-	this.notifySceneChange();
-}
-
-	private notifySceneTransformChange():void
-	{
-		if (this._sceneTransformDirty || this._ignoreTransform)
-			return;
-
-		this.invalidateSceneTransform();
-
-		var i:number;
-		var len:number = this._children.length;
-
-		//act recursively on child objects
-		while (i < len)
-			this._children[i++].notifySceneTransformChange();
-
-		//trigger event if listener exists
-		if (this._listenToSceneTransformChanged) {
-			//if (!this._sceneTransformChanged)
-			//	this._sceneTransformChanged = new Object3DEvent(Object3DEvent.SCENETRANSFORM_CHANGED, this);
-			//this.dispatchEvent(this._sceneTransformChanged);
-		}
-	}
-
-	private notifySceneChange():void
-	{
-		this.notifySceneTransformChange();
-
-		var i:number;
-		var len:number = this._children.length;
-
-		//act recursively on child objects
-		while (i < len)
-			this._children[i++].notifySceneChange();
-
-		if (this._listenToSceneChanged) {
-			//if (!this._scenechanged)
-			//	this._scenechanged = new Object3DEvent(Object3DEvent.SCENE_CHANGED, this);
-
-			//this.dispatchEvent(this._scenechanged);
-		}
-	}
-
-	protected updateMouseChildren():void
-	{
-		if (this._parent && !this._parent._isRoot) {
-			// Set implicit mouse enabled if parent its children to be so.
-			this._ancestorsAllowMouseEnabled = this.parent._ancestorsAllowMouseEnabled && this._parent.mouseChildren;
-		} else
-			this._ancestorsAllowMouseEnabled = this.mouseChildren;
-
-		// Sweep children.
-		var len:number = this._children.length;
-		for (var i:number = 0; i < len; ++i)
-			this._children[i].updateMouseChildren();
-	}
 
 	/**
 	 * Indicates whether the IRenderable should trigger mouse events, and hence should be rendered for hit testing.
 	 */
 	public get mouseEnabled():boolean
 	{
-		return this._mouseEnabled;
+		return this.adaptee.mouseEnabled;
 	}
 
 	public set mouseEnabled(value:boolean)
 	{
-		this._mouseEnabled = value;
-		this.updateMouseChildren();
+		this.adaptee.mouseEnabled = value;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	/*override*/ /*arcane*/ invalidateTransform():void
-{
-	super.invalidateTransform();
-
-	this.notifySceneTransformChange();
-}
-
-	/**
-	 * Invalidates the scene transformation matrix, causing it to be updated the next time it's requested.
-	 */
-	protected invalidateSceneTransform():void
-	{
-		this._sceneTransformDirty = !this._ignoreTransform;
-		this._inverseSceneTransformDirty = !this._ignoreTransform;
-		this._scenePositionDirty = !this._ignoreTransform;
-	}
-
-	/**
-	 * Updates the scene transformation matrix.
-	 */
-	protected updateSceneTransform():void
-	{
-		if (this._parent && !this._parent._isRoot) {
-			this._sceneTransform.copyFrom(this._parent.sceneTransform);
-			this._sceneTransform.prepend(this.transform);
-		} else
-			this._sceneTransform.copyFrom(this.transform);
-
-		this._sceneTransformDirty = false;
-	}
 
 	/**
 	 *
 	 */
 	public get mouseChildren():boolean
 	{
-		return this._mouseChildren;
+		return this.adaptee.mouseChildren;
 	}
 
 	public set mouseChildren(value:boolean)
 	{
-		this._mouseChildren = value;
-		this.updateMouseChildren();
+		this.adaptee.mouseChildren = value;
 	}
 
 	/**
@@ -298,21 +122,17 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get visible():boolean
 	{
-		return this._explicitVisibility;
+		return this.adaptee.visible;
 	}
 
 	public set visible(value:boolean)
 	{
-		var len:number = this._children.length;
-
-		this._explicitVisibility = value;
-
-		for (var i:number = 0; i < len; ++i)
-			this._children[i].updateImplicitVisibility();
+		this.adaptee.visible=value;
 	}
 
 	public get assetType():string
 	{
+		//todo
 		return "";//AssetType.CONTAINER;
 	}
 
@@ -321,12 +141,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get scenePosition():Vector3D
 	{
-		if (this._scenePositionDirty) {
-			this.sceneTransform.copyColumnTo(3, this._scenePosition);
-			this._scenePositionDirty = false;
-		}
-
-		return this._scenePosition;
+		return this.adaptee.scenePosition;
 	}
 
 	/**
@@ -334,19 +149,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get minX():number
 	{
-		var i:number;
-		var len:number = this._children.length;
-		var min:number = Number.POSITIVE_INFINITY;
-		var m:number;
-
-		while (i < len) {
-			var child:ObjectContainer3D = this._children[i++];
-			m = child.minX + child.x;
-			if (m < min)
-				min = m;
-		}
-
-		return min;
+		//todo
+		return 0;
 	}
 
 	/**
@@ -354,19 +158,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get minY():number
 	{
-		var i:number;
-		var len:number = this._children.length;
-		var min:number = Number.POSITIVE_INFINITY;
-		var m:number;
-
-		while (i < len) {
-			var child:ObjectContainer3D = this._children[i++];
-			m = child.minY + child.y;
-			if (m < min)
-				min = m;
-		}
-
-		return min;
+		//todo
+		return 0;
 	}
 
 	/**
@@ -374,19 +167,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get minZ():number
 	{
-		var i:number;
-		var len:number = this._children.length;
-		var min:number = Number.POSITIVE_INFINITY;
-		var m:number;
-
-		while (i < len) {
-			var child:ObjectContainer3D = this._children[i++];
-			m = child.minZ + child.z;
-			if (m < min)
-				min = m;
-		}
-
-		return min;
+		//todo
+		return 0;
 	}
 
 	/**
@@ -394,20 +176,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get maxX():number
 	{
-		// todo: this isn't right, doesn't take into account transforms
-		var i:number;
-		var len:number = this._children.length;
-		var max:number = Number.NEGATIVE_INFINITY;
-		var m:number;
-
-		while (i < len) {
-			var child:ObjectContainer3D = this._children[i++];
-			m = child.maxX + child.x;
-			if (m > max)
-				max = m;
-		}
-
-		return max;
+		//todo
+		return 0;
 	}
 
 	/**
@@ -415,19 +185,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get maxY():number
 	{
-		var i:number;
-		var len:number = this._children.length;
-		var max:number = Number.NEGATIVE_INFINITY;
-		var m:number;
-
-		while (i < len) {
-			var child:ObjectContainer3D = this._children[i++];
-			m = child.maxY + child.y;
-			if (m > max)
-				max = m;
-		}
-
-		return max;
+		//todo
+		return 0;
 	}
 
 	/**
@@ -435,19 +194,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get maxZ():number
 	{
-		var i:number;
-		var len:number = this._children.length;
-		var max:number = Number.NEGATIVE_INFINITY;
-		var m:number;
-
-		while (i < len) {
-			var child:ObjectContainer3D = this._children[i++];
-			m = child.maxZ + child.z;
-			if (m > max)
-				max = m;
-		}
-
-		return max;
+		//todo
+		return 0;
 	}
 
 	/**
@@ -463,9 +211,6 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	public set partition(value:any)
 	{
 		//todo any is Partition3D
-		//this._explicitPartition = value;
-
-		//this.implicitPartition = value? value : (this._parent? this._parent.implicitPartition : null);
 	}
 
 	/**
@@ -473,10 +218,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get sceneTransform():Matrix3D
 	{
-		if (this._sceneTransformDirty)
-			this.updateSceneTransform();
-
-		return this._sceneTransform;
+		//todo
+		return null;//this.adaptee.transform;
 	}
 
 	/**
@@ -484,37 +227,13 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get scene():Scene3D
 	{
-		return this._scene;
+		//todo
+		return null;
 	}
 
 	public set scene(value:Scene3D)
 	{
-		var i:number;
-		var len:number = this._children.length;
-
-		while (i < len)
-			this._children[i++].scene = value;
-
-		if (this._scene == value)
-			return;
-
-		// test to see if we're switching roots while we're already using a scene partition
-		if (value == null)
-			this._oldScene = this._scene;
-
-		//if (this._explicitPartition && this._oldScene && this._oldScene != this._scene)
-		//	this.partition = null;
-
-		if (value)
-			this._oldScene = null;
-		// end of stupid partition test code
-
-		this._scene = value;
-
-		//if (this._scene)
-		//	this._scene.dispatchEvent(new Scene3DEvent(Scene3DEvent.ADDED_TO_SCENE, this));
-		//else if (this._oldScene)
-		//	this._oldScene.dispatchEvent(new Scene3DEvent(Scene3DEvent.REMOVED_FROM_SCENE, this));
+		//todo
 	}
 
 	/**
@@ -522,13 +241,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get inverseSceneTransform():Matrix3D
 	{
-		if (this._inverseSceneTransformDirty) {
-			this._inverseSceneTransform.copyFrom(this.sceneTransform);
-			this._inverseSceneTransform.invert();
-			this._inverseSceneTransformDirty = false;
-		}
-
-		return this._inverseSceneTransform;
+		//todo
+		return null;//this.adaptee.transform;
 	}
 
 	/**
@@ -536,7 +250,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get parent():ObjectContainer3D
 	{
-		return this._parent;
+		//todo
+		return null;//(<IDisplayObjectAdapter>this.adaptee.parent.adapter);
 	}
 
 	/**
@@ -548,7 +263,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 
 	public contains(child:ObjectContainer3D):boolean
 	{
-		return this._children.indexOf(child) >= 0;
+		return this.adaptee.getChildIndex(child.adaptee) >= 0;
 	}
 
 	/**
@@ -559,23 +274,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public addChild(child:ObjectContainer3D):ObjectContainer3D
 	{
-		if (child == null)
-			throw new Error("Parameter child cannot be null.");
-
-		if (child._parent)
-			child._parent.removeChild(child);
-
-		//if (!child._explicitPartition)
-		//	child.implicitPartition = this._implicitPartition;
-
-		child.setParent(this);
-		child.scene = this._scene;
-		child.notifySceneTransformChange();
-		child.updateMouseChildren();
-		child.updateImplicitVisibility();
-
-		this._children.push(child);
-
+		this.adaptee.addChild(child.adaptee);
 		return child;
 	}
 
@@ -588,7 +287,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	{
 		let child:Object3D;
 		for  (child of childArray)
-			this.addChild((<ObjectContainer3D>child));
+			this.adaptee.addChild(child.adaptee);
 	}
 
 	/**
@@ -599,15 +298,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public removeChild(child:ObjectContainer3D):void
 	{
-		if (child == null)
-			throw new Error("Parameter child cannot be null");
-
-		var childIndex:number = this._children.indexOf(child);
-
-		if (childIndex == -1)
-			throw new Error("Parameter is not a child of the caller");
-
-		this.removeChildInternal(childIndex, child);
+		this.adaptee.removeChild(child.adaptee);
 	}
 
 	/**
@@ -617,21 +308,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public removeChildAt(index:number):void
 	{
-		var child:ObjectContainer3D = this._children[index];
-
-		this.removeChildInternal(index, child);
-	}
-
-	private removeChildInternal(childIndex:number, child:ObjectContainer3D):void
-	{
-		// index is important because getChildAt needs to be regular.
-		this._children.splice(childIndex, 1);
-
-		// this needs to be nullified before the callbacks!
-		child.setParent(null);
-
-		//if (!child._explicitPartition)
-		//	child.implicitPartition = null;
+		this.adaptee.removeChildAt(index);
 	}
 
 	/**
@@ -641,7 +318,8 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public getChildAt(index:number):ObjectContainer3D
 	{
-		return this._children[index];
+		//todo
+		return null;//(<ObjectContainer3D>this.adaptee.getChildAt(index).adapter);
 	}
 
 	/**
@@ -649,44 +327,38 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get numChildren():number
 	{
-		return this._children.length;
+		return this.adaptee.numChildren;
+
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	/*override*/ public lookAt(target:Vector3D, upAxis:Vector3D = null):void
-{
-	super.lookAt(target, upAxis);
+	public lookAt(target:Vector3D, upAxis:Vector3D = null):void
+	{
+		this.adaptee.lookAt(target, upAxis);
+	}
 
-	this.notifySceneTransformChange();
-}
-
-	/*override*/ public translateLocal(axis:Vector3D, distance:number):void
-{
-	super.translateLocal(axis, distance);
-
-	this.notifySceneTransformChange();
-}
+	public translateLocal(axis:Vector3D, distance:number):void
+	{
+		// todo
+	}
 
 	/**
 	 * @inheritDoc
 	 */
-	/*override*/ public dispose():void
-{
-	if (this.parent)
-		this.parent.removeChild(this);
-}
+	public dispose():void
+	{
+		// todo
+
+	}
 
 	/**
 	 * Disposes the current ObjectContainer3D including all of its children. This is a merely a convenience method.
 	 */
 	public disposeWithChildren():void
 	{
-		this.dispose();
-
-		while (this.numChildren > 0)
-			this.getChildAt(0).dispose();
+		// todo
 	}
 
 	/**
@@ -694,88 +366,16 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 * returns the result (which will be a copy of this container, containing copies
 	 * of all it's children.)
 	 */
-	/*override*/ public clone():Object3D
-{
-	var clone:ObjectContainer3D = new ObjectContainer3D();
-	clone.pivotPoint = this.pivotPoint;
-	clone.transform = this.transform;
-	clone.partition = this.partition;
-	clone.name = this.name;
-
-	var len:number = this._children.length;
-
-	for (var i:number = 0; i < len; ++i)
-		clone.addChild(<ObjectContainer3D>(this._children[i].clone()));
-
-	// todo: implement for all subtypes
-	return clone;
-}
-
-	/*override*/ public rotate(axis:Vector3D, angle:number):void
-{
-	super.rotate(axis, angle);
-
-	this.notifySceneTransformChange();
-}
-
-	/**
-	 * @inheritDoc
-	 */
-	/*override*/ public dispatchEvent(event:Event):boolean
-{
-	// maybe not the best way to fake bubbling?
-	/*
-	var ret:boolean = super.dispatchEvent(event);
-
-	if (event.bubbles) {
-		if (this._parent)
-			this._parent.dispatchEvent(event);
-		// if it's scene root
-		else if (this._scene)
-			this._scene.dispatchEvent(event);
-	}
-*/
-	return false;
-}
-
-	public updateImplicitVisibility():void
+	public clone():Object3D
 	{
-		var len:number = this._children.length;
-
-		this._implicitVisibility = this._parent._explicitVisibility && this._parent._implicitVisibility;
-
-		for (var i:number = 0; i < len; ++i)
-			this._children[i].updateImplicitVisibility();
+		// todo
+		return null;
 	}
 
-	/*override*/ public addEventListener(type:string, listener:(event:EventBase) => void, useCapture:boolean = false, priority:number = 0, useWeakReference:boolean = false):void
-{
-	super.addEventListener(type, listener, useCapture, priority, useWeakReference);
-	/*switch (type) {
-		case Object3DEvent.SCENETRANSFORM_CHANGED:
-			this._listenToSceneTransformChanged = true;
-			break;
-		case Object3DEvent.SCENE_CHANGED:
-			this._listenToSceneChanged = true;
-			break;
-	}*/
-}
+	public rotate(axis:Vector3D, angle:number):void
+	{
+		//todo
+	}
 
-	/*override*/ public removeEventListener(type:string, listener:(event:EventBase) => void, useCapture:boolean = false):void
-{
-	super.removeEventListener(type, listener, useCapture);
-
-	if (this.hasEventListener(type))
-		return;
-/*
-	switch (type) {
-		case Object3DEvent.SCENETRANSFORM_CHANGED:
-			this._listenToSceneTransformChanged = false;
-			break;
-		case Object3DEvent.SCENE_CHANGED:
-			this._listenToSceneChanged = false;
-			break;
-	}*/
-}
 }
 

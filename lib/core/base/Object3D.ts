@@ -1,40 +1,29 @@
 import { NamedAssetBase } from "../../library/assets/NamedAssetBase";
-//import { ControllerBase } from "../../controllers/ControllerBase";
-//import { Object3DEvent } from "../../events/Object3DEvent";
 import { Vector3D, Matrix3D, MathConsts } from "@awayjs/core";
-import { EventBase } from "@awayjs/core"
-/*import away3d.*;*/
-/*import away3d.controllers.*;*/
-/*import away3d.core.math.*;*/
-/*import away3d.events.*;*/
-/*import away3d.library.assets.*;*/
+import { IDisplayObjectAdapter, DisplayObject } from "@awayjs/scene"
 
-/*import flash.geom.*;*/
-
-/*use namespace arcane*/;
 
 /**
  * Dispatched when the position of the 3d object changes.
  *
  * @eventType away3d.events.Object3DEvent
- */
-/*[Event(name="positionChanged", type="away3d.events.Object3DEvent")]*/
 
-/**
+[Event(name="positionChanged", type="away3d.events.Object3DEvent")]
+
+
  * Dispatched when the scale of the 3d object changes.
  *
  * @eventType away3d.events.Object3DEvent
- */
-/*[Event(name="scaleChanged", type="away3d.events.Object3DEvent")]*/
 
-/**
+[Event(name="scaleChanged", type="away3d.events.Object3DEvent")]
+
+
  * Dispatched when the rotation of the 3d object changes.
  *
  * @eventType away3d.events.Object3DEvent
- */
-/*[Event(name="rotationChanged", type="away3d.events.Object3DEvent")]*/
 
-/**
+[Event(name="rotationChanged", type="away3d.events.Object3DEvent")]
+
  * Object3D provides a base class for any 3D object that has a (local) transformation.<br/><br/>
  *
  * Standard Transform:
@@ -77,164 +66,27 @@ import { EventBase } from "@awayjs/core"
  * </ul>
  */
 
-export class Object3D extends NamedAssetBase
+export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 {
-	/** @private */
-	/*arcane*/
-	//_controller:ControllerBase;
 
-	private _smallestNumber:number = 0.0000000000000000000001;
-	private _transformDirty:boolean = true;
-
-	private _positionDirty:boolean;
-	private _rotationDirty:boolean;
-	private _scaleDirty:boolean;
-
-	// TODO: not used
-	// private var _positionValuesDirty:Boolean;
-	// private var _rotationValuesDirty:Boolean;
-	// private var _scaleValuesDirty:Boolean;
-
-	//private _positionChanged:Object3DEvent;
-	//private _rotationChanged:Object3DEvent;
-	//private _scaleChanged:Object3DEvent;
-
-	private _rotationX:number = 0;
-	private _rotationY:number = 0;
-	private _rotationZ:number = 0;
-	private _eulers:Vector3D = new Vector3D();
-
-	private _flipY:Matrix3D = new Matrix3D();
-	private _listenToPositionChanged:boolean;
-	private _listenToRotationChanged:boolean;
-	private _listenToScaleChanged:boolean;
-
-	protected _zOffset:number = 0;
-
-	private invalidatePivot():void
-	{
-		this._pivotZero = (this._pivotPoint.x == 0) && (this._pivotPoint.y == 0) && (this._pivotPoint.z == 0);
-
-		this.invalidateTransform();
+	public isBlockedByScript():boolean{
+		return false;
 	}
 
-	private invalidatePosition():void
-	{
-		if (this._positionDirty)
-			return;
-
-		this._positionDirty = true;
-
-		this.invalidateTransform();
-
-		if (this._listenToPositionChanged)
-			this.notifyPositionChanged();
+	public isVisibilityByScript():boolean{
+		return false;
 	}
 
-	private notifyPositionChanged():void
-	{
-		/*if (!this._positionChanged)
-			this._positionChanged = new Object3DEvent(Object3DEvent.POSITION_CHANGED, this);
-*/
-		//this.dispatchEvent(this._positionChanged);
+	public freeFromScript():void{
+
 	}
 
-	/*override*/ public addEventListener(type:string, listener:(event:EventBase) => void, useCapture:boolean = false, priority:number = 0, useWeakReference:boolean = false):void
-{
-	super.addEventListener(type, listener);//, useCapture, priority, useWeakReference);
-	/*
-	switch (type) {
-		case Object3DEvent.POSITION_CHANGED:
-			this._listenToPositionChanged = true;
-			break;
-		case Object3DEvent.ROTATION_CHANGED:
-			this._listenToRotationChanged = true;
-			break;
-		case Object3DEvent.SCALE_CHANGED:
-			this._listenToRotationChanged = true;
-			break;
+	public get adaptee():DisplayObject{
+		return (<DisplayObject>this._adaptee);
 	}
-	*/
-}
-
-	/*override*/ public removeEventListener(type:string, listener:(event:EventBase) => void, useCapture:boolean = false):void
-{
-	super.removeEventListener(type, listener);//, useCapture);
-/*
-	if (this.hasEventListener(type))
-		return;
-
-	switch (type) {
-		case Object3DEvent.POSITION_CHANGED:
-			this._listenToPositionChanged = false;
-			break;
-		case Object3DEvent.ROTATION_CHANGED:
-			this._listenToRotationChanged = false;
-			break;
-		case Object3DEvent.SCALE_CHANGED:
-			this._listenToScaleChanged = false;
-			break;
+	public set adaptee(value:DisplayObject){
+		this._adaptee=value;
 	}
-	*/
-}
-
-	private invalidateRotation():void
-	{
-		if (this._rotationDirty)
-			return;
-
-		this._rotationDirty = true;
-
-		this.invalidateTransform();
-
-		if (this._listenToRotationChanged)
-			this.notifyRotationChanged();
-	}
-
-	private notifyRotationChanged():void
-	{
-		/*
-		if (!this._rotationChanged)
-			this._rotationChanged = new Object3DEvent(Object3DEvent.ROTATION_CHANGED, this);
-
-		this.dispatchEvent(this._rotationChanged);
-		*/
-	}
-
-	private invalidateScale():void
-	{
-		if (this._scaleDirty)
-			return;
-
-		this._scaleDirty = true;
-
-		this.invalidateTransform();
-
-		if (this._listenToScaleChanged)
-			this.notifyScaleChanged();
-	}
-
-	private notifyScaleChanged():void
-	{
-		//if (!this._scaleChanged)
-		//	this._scaleChanged = new Object3DEvent(Object3DEvent.SCALE_CHANGED, this);
-
-		//this.dispatchEvent(this._scaleChanged);
-	}
-
-	protected _transform:Matrix3D = new Matrix3D();
-	protected _scaleX:number = 1;
-	protected _scaleY:number = 1;
-	protected _scaleZ:number = 1;
-	protected _x:number = 0;
-	protected _y:number = 0;
-	protected _z:number = 0;
-	protected _pivotPoint:Vector3D = new Vector3D();
-	protected _pivotZero:boolean = true;
-	protected _pos:Vector3D = new Vector3D();
-	protected _rot:Vector3D = new Vector3D();
-	protected _sca:Vector3D = new Vector3D();
-	protected _transformComponents:Vector3D[];
 
 	/**
 	 * An object that can contain any extra data.
@@ -246,17 +98,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get x():number
 	{
-		return this._x;
+		return this.adaptee.x;
 	}
 
 	public set x(val:number)
 	{
-		if (this._x == val)
-			return;
-
-		this._x = val;
-
-		this.invalidatePosition();
+		this.adaptee.x=val;
 	}
 
 	/**
@@ -264,17 +111,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get y():number
 	{
-		return this._y;
+		return this.adaptee.y;
 	}
 
 	public set y(val:number)
 	{
-		if (this._y == val)
-			return;
-
-		this._y = val;
-
-		this.invalidatePosition();
+		this.adaptee.y=val;
 	}
 
 	/**
@@ -282,17 +124,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get z():number
 	{
-		return this._z;
+		return this.adaptee.z;
 	}
 
 	public set z(val:number)
 	{
-		if (this._z == val)
-			return;
-
-		this._z = val;
-
-		this.invalidatePosition();
+		this.adaptee.z=val;
 	}
 
 	/**
@@ -300,17 +137,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get rotationX():number
 	{
-		return this._rotationX*MathConsts.RADIANS_TO_DEGREES;
+		return this.adaptee.rotationX;
 	}
 
 	public set rotationX(val:number)
 	{
-		if (this.rotationX == val)
-			return;
-
-		this._rotationX = val*MathConsts.DEGREES_TO_RADIANS;
-
-		this.invalidateRotation();
+		this.adaptee.rotationX=val;
 	}
 
 	/**
@@ -318,17 +150,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get rotationY():number
 	{
-		return this._rotationY*MathConsts.RADIANS_TO_DEGREES;
+		return this.adaptee.rotationY;
 	}
 
 	public set rotationY(val:number)
 	{
-		if (this.rotationY == val)
-			return;
-
-		this._rotationY = val*MathConsts.DEGREES_TO_RADIANS;
-
-		this.invalidateRotation();
+		this.adaptee.rotationY=val;
 	}
 
 	/**
@@ -336,17 +163,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get rotationZ():number
 	{
-		return this._rotationZ*MathConsts.RADIANS_TO_DEGREES;
+		return this.adaptee.rotationZ;
 	}
 
 	public set rotationZ(val:number)
 	{
-		if (this.rotationZ == val)
-			return;
-
-		this._rotationZ = val*MathConsts.DEGREES_TO_RADIANS;
-
-		this.invalidateRotation();
+		this.adaptee.rotationZ=val;
 	}
 
 	/**
@@ -354,17 +176,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get scaleX():number
 	{
-		return this._scaleX;
+		return this.adaptee.scaleX;
 	}
 
 	public set scaleX(val:number)
 	{
-		if (this._scaleX == val)
-			return;
-
-		this._scaleX = val;
-
-		this.invalidateScale();
+		this.adaptee.scaleX=val;
 	}
 
 	/**
@@ -372,17 +189,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get scaleY():number
 	{
-		return this._scaleY;
+		return this.adaptee.scaleY;
 	}
 
 	public set scaleY(val:number)
 	{
-		if (this._scaleY == val)
-			return;
-
-		this._scaleY = val;
-
-		this.invalidateScale();
+		this.adaptee.scaleY=val;
 	}
 
 	/**
@@ -390,17 +202,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get scaleZ():number
 	{
-		return this._scaleZ;
+		return this.adaptee.scaleZ;
 	}
 
 	public set scaleZ(val:number)
 	{
-		if (this._scaleZ == val)
-			return;
-
-		this._scaleZ = val;
-
-		this.invalidateScale();
+		this.adaptee.scaleZ=val;
 	}
 
 	/**
@@ -408,20 +215,12 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get eulers():Vector3D
 	{
-		this._eulers.x = this._rotationX*MathConsts.RADIANS_TO_DEGREES;
-		this._eulers.y = this._rotationY*MathConsts.RADIANS_TO_DEGREES;
-		this._eulers.z = this._rotationZ*MathConsts.RADIANS_TO_DEGREES;
-
-		return this._eulers;
+		return this.adaptee.eulers;
 	}
 
 	public set eulers(value:Vector3D)
 	{
-		this._rotationX = value.x*MathConsts.DEGREES_TO_RADIANS;
-		this._rotationY = value.y*MathConsts.DEGREES_TO_RADIANS;
-		this._rotationZ = value.z*MathConsts.DEGREES_TO_RADIANS;
-
-		this.invalidateRotation();
+		this.adaptee.eulers=value;
 	}
 
 	/**
@@ -429,56 +228,13 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get transform():Matrix3D
 	{
-		if (this._transformDirty)
-			this.updateTransform();
-
-		return this._transform;
+		return this.adaptee.transform.matrix3D;
 	}
 
 	public set transform(val:Matrix3D)
 	{
-		/*
-		//ridiculous matrix error
-		var raw:number[] = Matrix3DUtils.RAW_DATA_CONTAINER;
-		val.copyRawDataTo(raw);
-		if (!raw[Number(0)]) {
-			raw[Number(0)] = this._smallestNumber;
-			val.copyRawDataFrom(raw);
-		}
 
-		var elements:Vector3D[] = Matrix3DUtils.decompose(val);
-		var vec:Vector3D;
-
-		vec = elements[0];
-
-		if (this._x != vec.x || this._y != vec.y || this._z != vec.z) {
-			this._x = vec.x;
-			this._y = vec.y;
-			this._z = vec.z;
-
-			this.invalidatePosition();
-		}
-
-		vec = elements[1];
-
-		if (this._rotationX != vec.x || this._rotationY != vec.y || this._rotationZ != vec.z) {
-			this._rotationX = vec.x;
-			this._rotationY = vec.y;
-			this._rotationZ = vec.z;
-
-			this.invalidateRotation();
-		}
-
-		vec = elements[2];
-
-		if (this._scaleX != vec.x || this._scaleY != vec.y || this._scaleZ != vec.z) {
-			this._scaleX = vec.x;
-			this._scaleY = vec.y;
-			this._scaleZ = vec.z;
-
-			this.invalidateScale();
-		}
-		*/
+		this.adaptee.transform.matrix3D=val;
 	}
 
 	/**
@@ -486,17 +242,13 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get pivotPoint():Vector3D
 	{
-		return this._pivotPoint;
+		//todo
+		return null;
 	}
 
 	public set pivotPoint(pivot:Vector3D)
 	{
-		if(!this._pivotPoint) this._pivotPoint = new Vector3D();
-		this._pivotPoint.x = pivot.x;
-		this._pivotPoint.y = pivot.y;
-		this._pivotPoint.z = pivot.z;
-
-		this.invalidatePivot();
+		//todo
 	}
 
 	/**
@@ -504,18 +256,13 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get position():Vector3D
 	{
-		this.transform.copyColumnTo(3, this._pos);
-
-		return this._pos.clone();
+		return this.adaptee.transform.position;
 	}
 
 	public set position(value:Vector3D)
 	{
-		this._x = value.x;
-		this._y = value.y;
-		this._z = value.z;
-
-		this.invalidatePosition();
+		//todo
+		//this.adaptee.transform.position=value;
 	}
 
 	/**
@@ -524,9 +271,8 @@ export class Object3D extends NamedAssetBase
 	 * @return
 	 */
 	public getPosition(v:Vector3D = null):Vector3D {
-		if(!v) v = new Vector3D();
-		this.transform.copyColumnTo(3, v);
-		return v;
+		//todo
+		return null;
 	}
 
 	/**
@@ -534,6 +280,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get forwardVector():Vector3D
 	{
+		//todo
 		return null;//Matrix3DUtils.getForward(this.transform);
 	}
 
@@ -542,6 +289,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get rightVector():Vector3D
 	{
+		//todo
 		return null;//Matrix3DUtils.getRight(this.transform);
 	}
 
@@ -550,6 +298,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get upVector():Vector3D
 	{
+		//todo
 		return null;//Matrix3DUtils.getUp(this.transform);
 	}
 
@@ -558,11 +307,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get backVector():Vector3D
 	{
-		/*var director:Vector3D = Matrix3DUtils.getForward(this.transform);
-		director.negate();
-
-		return director;
-		*/
+		//todo
 		return null;
 	}
 
@@ -571,11 +316,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get leftVector():Vector3D
 	{
-		/*var director:Vector3D = Matrix3DUtils.getRight(this.transform);
-		director.negate();
-
-		return director;
-	*/
+		//todo
 		return null;
 	}
 
@@ -584,12 +325,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public get downVector():Vector3D
 	{
-		/*
-		var director:Vector3D = Matrix3DUtils.getUp(this.transform);
-		director.negate();
-
-		return director;
-		*/
+		//todo
 		return null;
 	}
 
@@ -598,16 +334,6 @@ export class Object3D extends NamedAssetBase
 	 */
 	constructor(){
 		super();
-		// Cached vector of transformation components used when
-		// recomposing the transform matrix in updateTransform()
-		this._transformComponents = [];
-		this._transformComponents[0] = this._pos;
-		this._transformComponents[1] = this._rot;
-		this._transformComponents[2] = this._sca;
-
-		this._transform.identity();
-
-		this._flipY.appendScale(1, -1, 1);
 	}
 
 	/**
@@ -616,11 +342,8 @@ export class Object3D extends NamedAssetBase
 	 */
 	public scale(value:number):void
 	{
-		this._scaleX *= value;
-		this._scaleY *= value;
-		this._scaleZ *= value;
-
-		this.invalidateScale();
+		//todo
+		// this.adaptee.scale;
 	}
 
 	/**
@@ -630,7 +353,8 @@ export class Object3D extends NamedAssetBase
 	 */
 	public moveForward(distance:number):void
 	{
-		this.translateLocal(Vector3D.Z_AXIS, distance);
+		//todo
+		//this.translateLocal(Vector3D.Z_AXIS, distance);
 	}
 
 	/**
@@ -640,7 +364,8 @@ export class Object3D extends NamedAssetBase
 	 */
 	public moveBackward(distance:number):void
 	{
-		this.translateLocal(Vector3D.Z_AXIS, -distance);
+		//todo
+		//this.translateLocal(Vector3D.Z_AXIS, -distance);
 	}
 
 	/**
@@ -650,7 +375,8 @@ export class Object3D extends NamedAssetBase
 	 */
 	public moveLeft(distance:number):void
 	{
-		this.translateLocal(Vector3D.X_AXIS, -distance);
+		//todo
+		//this.translateLocal(Vector3D.X_AXIS, -distance);
 	}
 
 	/**
@@ -660,7 +386,8 @@ export class Object3D extends NamedAssetBase
 	 */
 	public moveRight(distance:number):void
 	{
-		this.translateLocal(Vector3D.X_AXIS, distance);
+		//todo
+		//this.translateLocal(Vector3D.X_AXIS, distance);
 	}
 
 	/**
@@ -670,7 +397,8 @@ export class Object3D extends NamedAssetBase
 	 */
 	public moveUp(distance:number):void
 	{
-		this.translateLocal(Vector3D.Y_AXIS, distance);
+		//todo
+		//this.translateLocal(Vector3D.Y_AXIS, distance);
 	}
 
 	/**
@@ -680,7 +408,8 @@ export class Object3D extends NamedAssetBase
 	 */
 	public moveDown(distance:number):void
 	{
-		this.translateLocal(Vector3D.Y_AXIS, -distance);
+		//todo
+		//this.translateLocal(Vector3D.Y_AXIS, -distance);
 	}
 
 	/**
@@ -692,13 +421,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public moveTo(dx:number, dy:number, dz:number):void
 	{
-		if (this._x == dx && this._y == dy && this._z == dz)
-			return;
-		this._x = dx;
-		this._y = dy;
-		this._z = dz;
-
-		this.invalidatePosition();
+		//todo
 	}
 
 	/**
@@ -710,12 +433,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public movePivot(dx:number, dy:number, dz:number):void
 	{
-		if(!this._pivotPoint) this._pivotPoint = new Vector3D();
-		this._pivotPoint.x += dx;
-		this._pivotPoint.y += dy;
-		this._pivotPoint.z += dz;
-
-		this.invalidatePivot();
+		this.adaptee.movePivot(dx, dy, dz);
 	}
 
 	/**
@@ -726,14 +444,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public translate(axis:Vector3D, distance:number):void
 	{
-		var x:number = axis.x, y:number = axis.y, z:number = axis.z;
-		var len:number = distance/Math.sqrt(x*x + y*y + z*z);
-
-		this._x += x*len;
-		this._y += y*len;
-		this._z += z*len;
-
-		this.invalidatePosition();
+		//todo
 	}
 
 	/**
@@ -744,18 +455,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public translateLocal(axis:Vector3D, distance:number):void
 	{
-		var x:number = axis.x, y:number = axis.y, z:number = axis.z;
-		var len:number = distance/Math.sqrt(x*x + y*y + z*z);
-
-		this.transform.prependTranslation(x*len, y*len, z*len);
-
-		this._transform.copyColumnTo(3, this._pos);
-
-		this._x = this._pos.x;
-		this._y = this._pos.y;
-		this._z = this._pos.z;
-
-		this.invalidatePosition();
+		//todo
 	}
 
 	/**
@@ -765,7 +465,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public pitch(angle:number):void
 	{
-		this.rotate(Vector3D.X_AXIS, angle);
+		//todo
 	}
 
 	/**
@@ -775,7 +475,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public yaw(angle:number):void
 	{
-		this.rotate(Vector3D.Y_AXIS, angle);
+		//todo
 	}
 
 	/**
@@ -785,17 +485,13 @@ export class Object3D extends NamedAssetBase
 	 */
 	public roll(angle:number):void
 	{
-		this.rotate(Vector3D.Z_AXIS, angle);
+		//todo
 	}
 
-	public clone():Object3D
+	public clone(newAdaptee:DisplayObject=null):Object3D
 	{
-		var clone:Object3D = new Object3D();
-		clone.pivotPoint = this.pivotPoint;
-		clone.transform = this.transform;
-		clone.name = this.name;
-		// todo: implement for all subtypes
-		return clone;
+		//todo
+		return null;
 	}
 
 	/**
@@ -807,11 +503,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public rotateTo(ax:number, ay:number, az:number):void
 	{
-		this._rotationX = ax*MathConsts.DEGREES_TO_RADIANS;
-		this._rotationY = ay*MathConsts.DEGREES_TO_RADIANS;
-		this._rotationZ = az*MathConsts.DEGREES_TO_RADIANS;
-
-		this.invalidateRotation();
+		//todo
 	}
 
 	/**
@@ -822,21 +514,9 @@ export class Object3D extends NamedAssetBase
 	 */
 	public rotate(axis:Vector3D, angle:number):void
 	{
-		var m:Matrix3D = new Matrix3D();
-		m.prependRotation(angle, axis);
-
-		var vec:Vector3D = m.decompose()[1];
-
-		this._rotationX += vec.x;
-		this._rotationY += vec.y;
-		this._rotationZ += vec.z;
-
-		this.invalidateRotation();
+		//todo
 	}
 
-	private static tempAxeX:Vector3D;
-	private static tempAxeY:Vector3D;
-	private static tempAxeZ:Vector3D;
 	/**
 	 * Rotates the 3d object around to face a point defined relative to the local coordinates of the parent <code>ObjectContainer3D</code>.
 	 *
@@ -845,74 +525,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public lookAt(target:Vector3D, upAxis:Vector3D = null):void
 	{
-		if(!Object3D.tempAxeX) Object3D.tempAxeX = new Vector3D();
-		if(!Object3D.tempAxeY) Object3D.tempAxeY = new Vector3D();
-		if(!Object3D.tempAxeZ) Object3D.tempAxeZ = new Vector3D();
-		var xAxis:Vector3D = Object3D.tempAxeX;
-		var yAxis:Vector3D = Object3D.tempAxeY;
-		var zAxis:Vector3D = Object3D.tempAxeZ;
-
-		var raw:number[];
-
-		/*
-		upAxis ||this.= Vector3D.Y_AXIS;
-
-		if (this._transformDirty) {
-			this.updateTransform();
-		}
-
-		zAxis.x = target.x - this._x;
-		zAxis.y = target.y - this._y;
-		zAxis.z = target.z - this._z;
-		zAxis.normalize();
-
-		xAxis.x = upAxis.y*zAxis.z - upAxis.z*zAxis.y;
-		xAxis.y = upAxis.z*zAxis.x - upAxis.x*zAxis.z;
-		xAxis.z = upAxis.x*zAxis.y - upAxis.y*zAxis.x;
-		xAxis.normalize();
-
-		if (xAxis.length < .05) {
-			xAxis.x = upAxis.y;
-			xAxis.y = upAxis.x;
-			xAxis.z = 0;
-			xAxis.normalize();
-		}
-
-		yAxis.x = zAxis.y*xAxis.z - zAxis.z*xAxis.y;
-		yAxis.y = zAxis.z*xAxis.x - zAxis.x*xAxis.z;
-		yAxis.z = zAxis.x*xAxis.y - zAxis.y*xAxis.x;
-		raw = Matrix3DUtils.RAW_DATA_CONTAINER;
-
-		raw[Number(0)] = this._scaleX*xAxis.x;
-		raw[Number(1)] = this._scaleX*xAxis.y;
-		raw[Number(2)] = this._scaleX*xAxis.z;
-		raw[Number(3)] = 0;
-
-		raw[Number(4)] = this._scaleY*yAxis.x;
-		raw[Number(5)] = this._scaleY*yAxis.y;
-		raw[Number(6)] = this._scaleY*yAxis.z;
-		raw[Number(7)] = 0;
-
-		raw[Number(8)] = this._scaleZ*zAxis.x;
-		raw[Number(9)] = this._scaleZ*zAxis.y;
-		raw[Number(10)] = this._scaleZ*zAxis.z;
-		raw[Number(11)] = 0;
-
-		raw[Number(12)] = this._x;
-		raw[Number(13)] = this._y;
-		raw[Number(14)] = this._z;
-		raw[Number(15)] = 1;
-
-		this._transform.copyRawDataFrom(raw);
-
-		this.transform = this.transform;
-
-		if (zAxis.z < 0) {
-			this.rotationY = (180 - this.rotationY);
-			this.rotationX -= 180;
-			this.rotationZ -= 180;
-		}
-		*/
+		//todo
 	}
 
 	/**
@@ -920,6 +533,7 @@ export class Object3D extends NamedAssetBase
 	 */
 	public dispose():void
 	{
+		//todo
 	}
 
 	/**
@@ -927,62 +541,17 @@ export class Object3D extends NamedAssetBase
 	 */
 	public disposeAsset():void
 	{
-		this.dispose();
-	}
-
-	/**
-	 * Invalidates the transformation matrix, causing it to be updated upon the next request
-	 */
-	/*arcane*/ invalidateTransform():void
-{
-	this._transformDirty = true;
-}
-
-	protected updateTransform():void
-	{
-		this._pos.x = this._x;
-		this._pos.y = this._y;
-		this._pos.z = this._z;
-
-		this._rot.x = this._rotationX;
-		this._rot.y = this._rotationY;
-		this._rot.z = this._rotationZ;
-
-		if (!this._pivotZero) {
-			this._sca.x = 1;
-			this._sca.y = 1;
-			this._sca.z = 1;
-
-			this._transform.recompose(this._transformComponents);
-			this._transform.appendTranslation(this._pivotPoint.x, this._pivotPoint.y, this._pivotPoint.z);
-			this._transform.prependTranslation(-this._pivotPoint.x, -this._pivotPoint.y, -this._pivotPoint.z);
-			this._transform.prependScale(this._scaleX, this._scaleY, this._scaleZ);
-
-			this._sca.x = this._scaleX;
-			this._sca.y = this._scaleY;
-			this._sca.z = this._scaleZ;
-		}else{
-			this._sca.x = this._scaleX;
-			this._sca.y = this._scaleY;
-			this._sca.z = this._scaleZ;
-
-			this._transform.recompose(this._transformComponents);
-		}
-
-		this._transformDirty = false;
-		this._positionDirty = false;
-		this._rotationDirty = false;
-		this._scaleDirty = false;
+		//todo
 	}
 
 	public get zOffset():number
 	{
-		return this._zOffset;
+		return this.adaptee.zOffset;
 	}
 
 	public set zOffset(value:number)
 	{
-		this._zOffset = value;
+		this.adaptee.zOffset=value;
 	}
 }
 
