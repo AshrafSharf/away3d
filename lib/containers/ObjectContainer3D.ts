@@ -257,8 +257,12 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	/**
 	 * Creates a new ObjectContainer3D object.
 	 */
-	constructor(){
+	constructor(adaptee:DisplayObjectContainer=null){
 		super();
+		if(adaptee==null){
+			this.adaptee=new DisplayObjectContainer();
+			this.adaptee.adapter=this;
+		}
 	}
 
 	public contains(child:ObjectContainer3D):boolean
