@@ -1,1 +1,1 @@
-export class MaterialBase {}
+export {MethodMaterial as MaterialBase} from "@awayjs/materials"

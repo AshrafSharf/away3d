@@ -16,27 +16,23 @@ export class View3D extends Sprite
 	protected _camera:Camera3D;
 
 	private _view: View;
+	private _stage3DProxy: Stage3DProxy;
 	private _renderer: DefaultRenderer;
 
+	private _localTLPos:Point;
+	private _localBRPos:Point;
+	private _globalPos:Point;
 
 	constructor(scene:Scene3D = null, camera:Camera3D = null, renderer:any = null, forceSoftware:boolean = false, profile:string = "baseline"){
 		super();
 		//this._profile = profile;
+		this._localTLPos=new Point();
+		this._globalPos=new Point();
+		this._localBRPos=new Point();
+
 		this._scene = scene || new Scene3D();
-		this.initEninge();
 	}
 
-	private initEninge(){
-
-		//create the view
-		this._renderer = new DefaultRenderer();
-		this._renderer.renderableSorter = null;
-
-		this._view = new View(this._renderer);
-		this._camera = new Camera3D();
-		this._view.camera = this._camera.adaptee;
-		this._scene.adaptee=this._view.scene;
-	}
 
 
 	public get depthPrepass():boolean
@@ -65,12 +61,21 @@ export class View3D extends Sprite
 	public get stage3DProxy():Stage3DProxy
 	{
 		//todo
-		return null;
+		return this._stage3DProxy;
 	}
 
 	public set stage3DProxy(stage3DProxy:Stage3DProxy)
 	{
-		//todo
+		this._stage3DProxy=stage3DProxy;
+		//create the view
+		this._renderer = new DefaultRenderer(stage3DProxy.stage3D);
+		this._renderer.renderableSorter = null;
+
+		this._view = new View(this._renderer);
+		this._camera = new Camera3D();
+		this._view.camera = this._camera.adaptee;
+		this._scene.adaptee=this._view.scene;
+		this._view.scene.adapter=this._scene;
 	}
 
 
@@ -92,7 +97,7 @@ export class View3D extends Sprite
 	public get background():any
 	{
 		// todo any is Texture2DBase
-		return null;;
+		return null;
 	}
 
 	public set background(value:any)
@@ -107,13 +112,12 @@ export class View3D extends Sprite
 	 */
 	public get layeredView():boolean
 	{
-		//todo
-		return false;
+		return this._view.layeredView;
 	}
 
 	public set layeredView(value:boolean)
 	{
-		//todo
+		this._view.layeredView=value;
 	}
 
 
@@ -230,12 +234,16 @@ export class View3D extends Sprite
 	 */
 	public get width():number
 	{
-		return this._view.width;
+		return this.adaptee.width;
 	}
 
 	public set width(value:number)
 	{
-		this._view.width=value;
+
+		this.adaptee.width=value;
+		this._localBRPos.x = value + this._localTLPos.x;
+		this._view.width= this.adaptee.parent.localToGlobal(this._localBRPos).x - this._globalPos.x;
+
 	}
 
 	/**
@@ -244,27 +252,46 @@ export class View3D extends Sprite
 	 */
 	public get height():number
 	{
-		return this._view.height;
+		return this.adaptee.height;
 	}
 
 	public set height(value:number)
 	{
-		this._view.height=value;
+		this.adaptee.height=value;
+		this._localBRPos.y = value + this._localTLPos.y;
+		this._view.height=this.adaptee.parent.localToGlobal(this._localBRPos).y - this._globalPos.y;
+
 	}
 
+	public get x()
+	{
+		return this.adaptee.x;
+	}
 	public set x(value:number)
 	{
-		this._view.x=value;
+
+		this.adaptee.x=value;
+		this._localTLPos.x = value;
+		this._globalPos = this.adaptee.parent.localToGlobal(this._localTLPos);
+		this._view.x=this._globalPos.x;
 	}
 
+
+	public get y()
+	{
+		return this.adaptee.y;
+	}
 	public set y(value:number)
 	{
-		this._view.y=value;
+		this.adaptee.y=value;
+		this._localTLPos.y=value;
+		this._globalPos = this.adaptee.parent.localToGlobal(this._localTLPos);
+		this._view.y = this._globalPos.y;
 	}
 
 	public set visible(value:boolean)
 	{
-		//todo
+		this._view.visible=value;
 	}
 
 	/**
@@ -273,7 +300,7 @@ export class View3D extends Sprite
 	public get antiAlias():number
 	{
 		//todo
-		return 0;
+		return 8;
 	}
 
 	public set antiAlias(value:number)
@@ -297,12 +324,12 @@ export class View3D extends Sprite
 	public get shareContext():boolean
 	{
 		//todo
-		return false;
+		return this._view.shareContext;
 	}
 
 	public set shareContext(value:boolean)
 	{
-		//todo
+		this._view.shareContext=value;
 	}
 
 

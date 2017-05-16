@@ -116,17 +116,17 @@ export class Stage3DProxy extends EventDispatcher
 	constructor(stage3DIndex:number, stage3D:Stage3D, stage3DManager:Stage3DManager, forceSoftware:boolean = false, profile:string = "baseline"){
 		super();
 		this._stage3DIndex = stage3DIndex;
-		/*this._stage3D = stage3D;
+		this._stage3D = stage3D;
 		this._stage3D.x = 0;
 		this._stage3D.y = 0;
-		this._stage3D.visible = true;*/
+		this._stage3D.visible = true;
 		this._stage3DManager = stage3DManager;
 		this._viewPort = new Rectangle();
 		this._enableDepthAndStencil = true;
 
 		// whatever happens, be sure this has highest priority
 		//this._stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.onContext3DUpdate, false, 1000, false);
-		this.requestContext(forceSoftware, profile);
+		//this.requestContext(forceSoftware, profile);
 	}
 
 	public get profile():string
@@ -221,21 +221,6 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public clear():void
 	{
-		if (!this._context3D)
-			return;
-
-		if (this._backBufferDirty) {
-			this.configureBackBuffer(this._backBufferWidth, this._backBufferHeight, this._antiAlias);
-			this._backBufferDirty = false;
-		}
-
-		this._context3D.clear(
-			((this._color >> 16) & 0xff)/255.0,
-			((this._color >> 8) & 0xff)/255.0,
-			(this._color & 0xff)/255.0,
-			((this._color >> 24) & 0xff)/255.0);
-
-		this._bufferClear = true;
 	}
 
 	/*
@@ -243,15 +228,6 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public present():void
 	{
-		if (!this._context3D)
-			return;
-
-		this._context3D.present();
-
-		this._activeProgram3D = null;
-
-		if (this._mouse3DManager)
-			this._mouse3DManager.fireMouseEvents();
 	}
 
 	/**
@@ -347,7 +323,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get x():number
 	{
-		return 0;//this._stage3D.x;
+		return this._stage3D.x;
 	}
 
 	public set x(value:number)
@@ -355,7 +331,7 @@ export class Stage3DProxy extends EventDispatcher
 		if (this._viewPort.x == value)
 			return;
 
-		//this._stage3D.x = this._viewPort.x = value;
+		this._stage3D.x = this._viewPort.x = value;
 
 		this.notifyViewportUpdated();
 	}
@@ -365,7 +341,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get y():number
 	{
-		return 0;//this._stage3D.y;
+		return this._stage3D.y;
 	}
 
 	public set y(value:number)
@@ -373,7 +349,7 @@ export class Stage3DProxy extends EventDispatcher
 		if (this._viewPort.y == value)
 			return;
 
-		//this._stage3D.y = this._viewPort.y = value;
+		this._stage3D.y = this._viewPort.y = value;
 
 		this.notifyViewportUpdated();
 	}
@@ -383,19 +359,14 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get width():number
 	{
-		return this._backBufferWidth;
+		return this._stage3D.width;
 	}
 
 	public set width(width:number)
 	{
 		if (this._viewPort.width == width)
 			return;
-
-		if(width<50) width = 50;
-		this._backBufferWidth = this._viewPort.width = width;
-		this._backBufferDirty = true;
-
-		this.notifyViewportUpdated();
+		this._stage3D.width=width;
 	}
 
 	/**
@@ -403,19 +374,14 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get height():number
 	{
-		return this._backBufferHeight;
+		return this._stage3D.height;
 	}
 
 	public set height(height:number)
 	{
 		if (this._viewPort.height == height)
 			return;
-
-		if(height<50) height = 50;
-		this._backBufferHeight = this._viewPort.height = height;
-		this._backBufferDirty = true;
-
-		this.notifyViewportUpdated();
+		this._stage3D.height=height;
 	}
 
 	/**
@@ -465,7 +431,7 @@ export class Stage3DProxy extends EventDispatcher
 
 	public set visible(value:boolean)
 	{
-		//this._stage3D.visible = value;
+		this._stage3D.visible = value;
 	}
 
 	/**

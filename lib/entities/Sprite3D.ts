@@ -1,24 +1,33 @@
 
 import {Billboard} from "@awayjs/scene"
+import {MethodMaterial} from "@awayjs/materials"
+import {IMaterial} from "@awayjs/graphics"
 import {Entity} from "./Entity"
 import {MaterialBase} from "../materials/MaterialBase";
+import {Object3D} from "../core/base/Object3D";
 
 export class Sprite3D extends Entity{
 
-	private _material:MaterialBase;
-
-	constructor(mat:any, param1:number, param2:number){
+	constructor(mat:IMaterial, width:number, height:number){
 		super();
-		//todo
+		this.adaptee=new Billboard(mat);
+		this.adaptee.adapter=this;
+		this.adaptee.width=width;
+		this.adaptee.height=height;
 	}
-	public get material():MaterialBase
+	public get material():IMaterial
 	{
-		//todo
-		return this._material;
+		return this.adaptee.material;
+	}
+	public set material(value:IMaterial)
+	{
+		this.adaptee.material=value;
 	}
 
-	public set material(value:MaterialBase)
-	{
-		//todo
+	public get adaptee():Billboard{
+		return (<Billboard>this._adaptee);
+	}
+	public set adaptee(value:Billboard){
+		this._adaptee=value;
 	}
 }
