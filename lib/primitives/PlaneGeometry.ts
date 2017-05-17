@@ -1,7 +1,7 @@
 import {Geometry} from "../core/base/Geometry"
-import {PrimitiveBase} from "./PrimitiveBase"
 import {PrimitivePlanePrefab} from "@awayjs/scene"
 import {Sprite} from "@awayjs/scene"
+import {PrimitiveBase} from "./PrimitiveBase"
 export class PlaneGeometry extends PrimitiveBase
 {
 
