@@ -34,76 +34,15 @@ import { Rectangle } from "@as3web/flash"
  */
 export class Stage3DProxy extends EventDispatcher
 {
-	private static _frameEventDriver:Shape = new Shape();
 
 	/*arcane*/ _context3D:Context3D;
 	/*arcane*/ _stage3DIndex:number = -1;
 
-	private _usesSoftwareRendering:boolean;
 	private _profile:string;
+	private _forceSoftware:boolean;
 	private _stage3D:Stage3D;
-	private _activeProgram3D:any;//Program3D;
 	private _stage3DManager:Stage3DManager;
-	private _backBufferWidth:number;
-	private _backBufferHeight:number;
-	private _antiAlias:number;
-	private _enableDepthAndStencil:boolean;
-	private _backBufferEnableDepthAndStencil:boolean = true;
-	private _contextRequested:boolean;
-	//private var _activeVertexBuffers : Vector.<VertexBuffer3D> = new Vector.<VertexBuffer3D>(8, true);
-	//private var _activeTextures : Vector.<TextureBase> = new Vector.<TextureBase>(8, true);
-	private _renderTarget:any;//TextureBase;
-	private _renderSurfaceSelector:number;
-	private _scissorRect:Rectangle;
-	private _color:number;
-	private _backBufferDirty:boolean;
-	private _viewPort:Rectangle;
-	private _enterFrame:Event;
-	private _exitFrame:Event;
-	private _viewportUpdated:Stage3DEvent;
-	private _viewportDirty:boolean;
-	private _bufferClear:boolean;
-	private _mouse3DManager:any;//Mouse3DManager;
-	private _touch3DManager:any;//Touch3DManager;
 
-	private notifyViewportUpdated():void
-	{
-		if (this._viewportDirty)
-			return;
-
-		this._viewportDirty = true;
-
-		if (!this.hasEventListener(Stage3DEvent.VIEWPORT_UPDATED))
-			return;
-
-		//TODO: investigate bug causing coercion error
-		//if (!_viewportUpdated)
-		//this._viewportUpdated = new Stage3DEvent(Stage3DEvent.VIEWPORT_UPDATED);
-
-		//this.dispatchEvent(this._viewportUpdated);
-	}
-
-	private notifyEnterFrame():void
-	{
-		if (!this.hasEventListener(Event.ENTER_FRAME))
-			return;
-
-		if (!this._enterFrame)
-			this._enterFrame = new Event(Event.ENTER_FRAME);
-
-		this.dispatchEvent(this._enterFrame);
-	}
-
-	private notifyExitFrame():void
-	{
-		if (!this.hasEventListener(Event.EXIT_FRAME))
-			return;
-
-		if (!this._exitFrame)
-			this._exitFrame = new Event(Event.EXIT_FRAME);
-
-		this.dispatchEvent(this._exitFrame);
-	}
 
 	/**
 	 * Creates a Stage3DProxy object. This method should not be called directly. Creation of Stage3DProxy objects should
@@ -121,12 +60,8 @@ export class Stage3DProxy extends EventDispatcher
 		this._stage3D.y = 0;
 		this._stage3D.visible = true;
 		this._stage3DManager = stage3DManager;
-		this._viewPort = new Rectangle();
-		this._enableDepthAndStencil = true;
-
-		// whatever happens, be sure this has highest priority
-		//this._stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.onContext3DUpdate, false, 1000, false);
-		//this.requestContext(forceSoftware, profile);
+		this._forceSoftware = forceSoftware;
+		this._profile=profile;
 	}
 
 	public get profile():string
@@ -139,12 +74,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public dispose():void
 	{
-		//this._stage3DManager.removeStage3DProxy(this);
-		/*this._stage3D.removeEventListener(Event.CONTEXT3D_CREATE, this.onContext3DUpdate);
-		this.freeContext3D();
-		this._stage3D = null;
-		this._stage3DManager = null;
-		this._stage3DIndex = -1;*/
+		//todo
 	}
 
 	/**
@@ -156,21 +86,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public configureBackBuffer(backBufferWidth:number, backBufferHeight:number, antiAlias:number):void
 	{
-		if(backBufferWidth<50) backBufferWidth = 50;
-		if(backBufferHeight<50) backBufferHeight = 50;
-		var oldWidth:number = this._backBufferWidth;
-		var oldHeight:number = this._backBufferHeight;
-
-		this._backBufferWidth = this._viewPort.width = backBufferWidth;
-		this._backBufferHeight = this._viewPort.height = backBufferHeight;
-
-		if (oldWidth != this._backBufferWidth || oldHeight != this._backBufferHeight)
-			this.notifyViewportUpdated();
-
-		this._antiAlias = antiAlias;
-
-		if (this._context3D)
-			this._context3D.configureBackBuffer(backBufferWidth, backBufferHeight, antiAlias, this._backBufferEnableDepthAndStencil);
+		//todo
 	}
 
 	/*
@@ -178,13 +94,13 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get enableDepthAndStencil():boolean
 	{
-		return this._enableDepthAndStencil;
+		//todo
+		return false;
 	}
 
 	public set enableDepthAndStencil(enableDepthAndStencil:boolean)
 	{
-		this._enableDepthAndStencil = enableDepthAndStencil;
-		this._backBufferDirty = true;
+		//todo
 	}
 
 	public get renderTarget():any
@@ -196,24 +112,14 @@ export class Stage3DProxy extends EventDispatcher
 
 	public get renderSurfaceSelector():number
 	{
-		return this._renderSurfaceSelector;
+		//todo
+		return 0;
 	}
 
 	public setRenderTarget(target:any, enableDepthAndStencil:boolean = false, surfaceSelector:number = 0):void
 	{
 		//todo:any is TextureBase
 		console.log("Stage3DProxy: setRenderTarget not implemented yet")
-		/*if (this._renderTarget == target && surfaceSelector == this._renderSurfaceSelector && this._enableDepthAndStencil == enableDepthAndStencil)
-			return;
-		this._renderTarget = target;
-		this._renderSurfaceSelector = surfaceSelector;
-		this._enableDepthAndStencil = enableDepthAndStencil;
-
-		if (target)
-			this._context3D.setRenderToTexture(target, enableDepthAndStencil, this._antiAlias, surfaceSelector);
-		else
-			this._context3D.setRenderToBackBuffer();
-			*/
 	}
 
 	/*
@@ -221,6 +127,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public clear():void
 	{
+		this._stage3D.clear();
 	}
 
 	/*
@@ -228,52 +135,18 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public present():void
 	{
+		this._stage3D.context.present();
 	}
 
-	/**
-	 * Registers an event listener object with an EventDispatcher object so that the listener receives notification of an event. Special case for enterframe and exitframe events - will switch Stage3DProxy into automatic render mode.
-	 * You can register event listeners on all nodes in the display list for a specific type of event, phase, and priority.
-	 *
-	 * @param type The type of event.
-	 * @param listener The listener function that processes the event.
-	 * @param useCapture Determines whether the listener works in the capture phase or the target and bubbling phases. If useCapture is set to true, the listener processes the event only during the capture phase and not in the target or bubbling phase. If useCapture is false, the listener processes the event only during the target or bubbling phase. To listen for the event in all three phases, call addEventListener twice, once with useCapture set to true, then again with useCapture set to false.
-	 * @param priority The priority level of the event listener. The priority is designated by a signed 32-bit integer. The higher the number, the higher the priority. All listeners with priority n are processed before listeners of priority n-1. If two or more listeners share the same priority, they are processed in the order in which they were added. The default priority is 0.
-	 * @param useWeakReference Determines whether the reference to the listener is strong or weak. A strong reference (the default) prevents your listener from being garbage-collected. A weak reference does not.
-	 */
-	public /*override*/ addEventListener(type:string, listener:(event:EventBase) => void, useCapture:boolean = false, priority:number = 0, useWeakReference:boolean = false):void
-	{
-		super.addEventListener(type, listener);
-
-		if ((type == Event.ENTER_FRAME || type == Event.EXIT_FRAME) && !Stage3DProxy._frameEventDriver.hasEventListener(Event.ENTER_FRAME))
-			Stage3DProxy._frameEventDriver.addEventListener(Event.ENTER_FRAME, this.onEnterFrame);
-	}
-
-	/**
-	 * Removes a listener from the EventDispatcher object. Special case for enterframe and exitframe events - will switch Stage3DProxy out of automatic render mode.
-	 * If there is no matching listener registered with the EventDispatcher object, a call to this method has no effect.
-	 *
-	 * @param type The type of event.
-	 * @param listener The listener object to remove.
-	 * @param useCapture Specifies whether the listener was registered for the capture phase or the target and bubbling phases. If the listener was registered for both the capture phase and the target and bubbling phases, two calls to removeEventListener() are required to remove both, one call with useCapture() set to true, and another call with useCapture() set to false.
-	 */
-	public /*override*/ removeEventListener(type:string, listener:(event:EventBase) => void, useCapture:boolean = false):void
-	{
-		super.removeEventListener(type, listener);
-
-		// Remove the main rendering listener if no EnterFrame listeners remain
-		if (!this.hasEventListener(Event.ENTER_FRAME) && !this.hasEventListener(Event.EXIT_FRAME) && Stage3DProxy._frameEventDriver.hasEventListener(Event.ENTER_FRAME))
-			Stage3DProxy._frameEventDriver.removeEventListener(Event.ENTER_FRAME, this.onEnterFrame);
-	}
 
 	public get scissorRect():Rectangle
 	{
-		return this._scissorRect;
+		return this._stage3D.scissorRect;
 	}
 
 	public set scissorRect(value:Rectangle)
 	{
-		this._scissorRect = value;
-		this._context3D.setScissorRectangle(this._scissorRect);
+		this._stage3D.scissorRect = value;
 	}
 
 	/**
@@ -297,7 +170,8 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get context3D():Context3D
 	{
-		return this._context3D;
+		//todo
+		return null;
 	}
 
 	/**
@@ -305,6 +179,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get driverInfo():string
 	{
+		//todo
 		return "";//this._context3D? this._context3D.driverInfo : null;
 	}
 
@@ -315,7 +190,8 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get usesSoftwareRendering():boolean
 	{
-		return this._usesSoftwareRendering;
+		//todo
+		return false;
 	}
 
 	/**
@@ -328,12 +204,8 @@ export class Stage3DProxy extends EventDispatcher
 
 	public set x(value:number)
 	{
-		if (this._viewPort.x == value)
-			return;
+		this._stage3D.x = value;
 
-		this._stage3D.x = this._viewPort.x = value;
-
-		this.notifyViewportUpdated();
 	}
 
 	/**
@@ -346,12 +218,7 @@ export class Stage3DProxy extends EventDispatcher
 
 	public set y(value:number)
 	{
-		if (this._viewPort.y == value)
-			return;
-
-		this._stage3D.y = this._viewPort.y = value;
-
-		this.notifyViewportUpdated();
+		this._stage3D.y = value;
 	}
 
 	/**
@@ -364,8 +231,6 @@ export class Stage3DProxy extends EventDispatcher
 
 	public set width(width:number)
 	{
-		if (this._viewPort.width == width)
-			return;
 		this._stage3D.width=width;
 	}
 
@@ -379,8 +244,6 @@ export class Stage3DProxy extends EventDispatcher
 
 	public set height(height:number)
 	{
-		if (this._viewPort.height == height)
-			return;
 		this._stage3D.height=height;
 	}
 
@@ -389,13 +252,13 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get antiAlias():number
 	{
-		return this._antiAlias;
+		//todo
+		return 0;
 	}
 
 	public set antiAlias(antiAlias:number)
 	{
-		this._antiAlias = antiAlias;
-		this._backBufferDirty = true;
+		//todo
 	}
 
 	/**
@@ -403,9 +266,8 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get viewPort():Rectangle
 	{
-		this._viewportDirty = false;
-
-		return this._viewPort;
+		//todo
+		return null;
 	}
 
 	/**
@@ -413,12 +275,13 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get color():number
 	{
-		return this._color;
+		//todo
+		return 0;
 	}
 
 	public set color(color:number)
 	{
-		this._color = color;
+		//todo
 	}
 
 	/**
@@ -426,7 +289,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get visible():boolean
 	{
-		return true;//this._stage3D.visible;
+		return this._stage3D.visible;
 	}
 
 	public set visible(value:boolean)
@@ -439,12 +302,13 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	public get bufferClear():boolean
 	{
-		return this._bufferClear;
+		//todo
+		return false;
 	}
 
 	public set bufferClear(newBufferClear:boolean)
 	{
-		this._bufferClear = newBufferClear;
+		//todo
 	}
 
 	/*
@@ -476,11 +340,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	private freeContext3D():void
 	{
-		if (this._context3D) {
-			this._context3D.dispose();
-			//this.dispatchEvent(new Stage3DEvent(Stage3DEvent.CONTEXT3D_DISPOSED));
-		}
-		this._context3D = null;
+		//todo
 	}
 
 	/*
@@ -489,27 +349,7 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	private onContext3DUpdate(event:Event):void
 	{
-		/*
-		if (this._stage3D.context3D) {
-			var hadContext:boolean = (this._context3D != null);
-			this._context3D = this._stage3D.context3D;
-			this._context3D.enableErrorChecking = Debug.active;
-
-			this._usesSoftwareRendering = (this._context3D.driverInfo.indexOf('Software') == 0);
-
-			// Only configure back buffer if width and height have been set,
-			// which they may not have been if View3D.render() has yet to be
-			// invoked for the first time.
-			if (this._backBufferWidth && this._backBufferHeight)
-				this._context3D.configureBackBuffer(this._backBufferWidth, this._backBufferHeight, this._antiAlias, this._backBufferEnableDepthAndStencil);
-
-			// Dispatch the appropriate event depending on whether context was
-			// created for the first time or recreated after a device loss.
-			//this.dispatchEvent(new Stage3DEvent(hadContext? Stage3DEvent.CONTEXT3D_RECREATED : Stage3DEvent.CONTEXT3D_CREATED));
-
-		} else
-			throw new Error("Rendering context lost!");
-			*/
+		//todo
 	}
 
 	/**
@@ -517,76 +357,28 @@ export class Stage3DProxy extends EventDispatcher
 	 */
 	private requestContext(forceSoftware:boolean = false, profile:string = "baseline"):void
 	{
-		// If forcing software, we can be certain that the
-		// returned Context3D will be running software mode.
-		// If not, we can't be sure and should stick to the
-		// old value (will likely be same if re-requesting.)
-		//this._usesSoftwareRendering ||this.= forceSoftware;
-		//this._profile = profile;
-/*
-		// ugly stuff for backward compatibility
-		var renderMode:string = forceSoftware? Context3DRenderMode.SOFTWARE : Context3DRenderMode.AUTO;
-		if (profile == "baseline")
-			this._stage3D.requestContext3D(renderMode);
-		else {
-			try {
-				this._stage3D["requestContext3D"](renderMode, profile);
-			} catch (error:Error) {
-				throw "An error occurred creating a context using the given profile. Profiles are not supported for the SDK this was compiled with.";
-			}
-		}
-*/
-		this._contextRequested = true;
+		//todo
 	}
 
-	/**
-	 * The Enter_Frame handler for processing the proxy.ENTER_FRAME and proxy.EXIT_FRAME event handlers.
-	 * Typically the proxy.ENTER_FRAME listener would render the layers for this Stage3D instance.
-	 */
-	private onEnterFrame(event:Event):void
-	{
-		if (!this._context3D)
-			return;
-
-		// Clear the stage3D instance
-		this.clear();
-
-		//notify the enterframe listeners
-		this.notifyEnterFrame();
-
-		// Call the present() to render the frame
-		this.present();
-
-		//notify the exitframe listeners
-		this.notifyExitFrame();
-	}
 
 	public recoverFromDisposal():boolean
 	{
-		if (!this._context3D)
-			return false;
-		/*if (this._context3D.driverInfo == "Disposed") {
-			this._context3D = null;
-			//this.dispatchEvent(new Stage3DEvent(Stage3DEvent.CONTEXT3D_DISPOSED));
-			return false;
-		}*/
+		//todo
 		return true;
 	}
 
 	public clearDepthBuffer():void
 	{
-		if (!this._context3D)
-			return;
-		this._context3D.clear(0, 0, 0, 1, 1, 0, Context3DClearMask.DEPTH);
+		//todo
 	}
 
 	public get backBufferEnableDepthAndStencil():boolean {
-		return this._backBufferEnableDepthAndStencil;
+		//todo
+		return false;
 	}
 
 	public set backBufferEnableDepthAndStencil(value:boolean) {
-		this._backBufferEnableDepthAndStencil = value;
-		this._backBufferDirty = true;
+		//todo
 	}
 }
 

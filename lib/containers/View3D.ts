@@ -19,16 +19,24 @@ export class View3D extends Sprite
 	private _stage3DProxy: Stage3DProxy;
 	private _renderer: DefaultRenderer;
 
+	private _profile: string;
+	private _forceSoftware: boolean;
+	
 	private _localTLPos:Point;
 	private _localBRPos:Point;
 	private _globalPos:Point;
 
-	constructor(scene:Scene3D = null, camera:Camera3D = null, renderer:any = null, forceSoftware:boolean = false, profile:string = "baseline"){
+	constructor(scene:Scene3D = null, camera:Camera3D = null, renderer:DefaultRenderer = null, forceSoftware:boolean = false, profile:string = "baseline"){
 		super();
 		//this._profile = profile;
 		this._localTLPos=new Point();
 		this._globalPos=new Point();
 		this._localBRPos=new Point();
+		
+		this._camera=camera|| new Camera3D();
+		this._renderer=renderer;
+		this._forceSoftware=forceSoftware;
+		this._profile=profile;
 
 		this._scene = scene || new Scene3D();
 	}
@@ -37,30 +45,27 @@ export class View3D extends Sprite
 
 	public get depthPrepass():boolean
 	{
-		//todo
-		return false;
+		throw("depthPrepass not implemented yet in View3D");
 	}
 
 	public set depthPrepass(value:boolean)
 	{
-		//todo
+		throw("depthPrepass not implemented yet in View3D");
 	}
 
 
 	public get rightClickMenuEnabled():boolean
 	{
-		//todo
-		return false;
+		throw("rightClickMenuEnabled not implemented yet in View3D");
 	}
 
 	public set rightClickMenuEnabled(val:boolean)
 	{
-		//todo
+		throw("rightClickMenuEnabled not implemented yet in View3D");
 	}
 
 	public get stage3DProxy():Stage3DProxy
 	{
-		//todo
 		return this._stage3DProxy;
 	}
 
@@ -86,23 +91,25 @@ export class View3D extends Sprite
 	public get forceMouseMove():boolean
 	{
 		//todo
-		return false;
+		throw("forceMouseMove not implemented yet in View3D");
 	}
 
 	public set forceMouseMove(value:boolean)
 	{
 		//todo
+		throw("forceMouseMove not implemented yet in View3D");
 	}
 
 	public get background():any
 	{
 		// todo any is Texture2DBase
-		return null;
+		throw("background-texture not implemented yet in View3D");
 	}
 
 	public set background(value:any)
 	{
 		// todo any is Texture2DBase
+		throw("background-texture not implemented yet in View3D");
 	}
 	/**
 	 * Used in a sharedContext. When true, clears the depth buffer prior to rendering this particular
@@ -126,7 +133,7 @@ export class View3D extends Sprite
 	 */
 	public get filters():any[]
 	{
-		throw new Error("filters is not supported in View3D. Use filters3d instead.");
+		throw ("filters is not supported in View3D. Use filters3d instead.");
 	}
 
 	/**
@@ -134,18 +141,19 @@ export class View3D extends Sprite
 	 */
 	public set filters(value:any[])
 	{
-		throw new Error("filters is not supported in View3D. Use filters3d instead.");
+		throw ("filters is not supported in View3D. Use filters3d instead.");
 	}
 
 	public get filters3d():any[]
 	{
 		//todo: any
-		return [];
+		throw("filters3d not implemented yet in View3D");
 	}
 
 	public set filters3d(value:any[])
 	{
 		//todo: any
+		throw("filters3d not implemented yet in View3D");
 	}
 
 	/**
@@ -155,12 +163,13 @@ export class View3D extends Sprite
 	public get renderer():any
 	{
 		//todo: any is Rendererbase
-		return null;
+		throw("renderer not implemented yet in View3D");
 	}
 
 	public set renderer(value:any)
 	{
 		//todo: any is Rendererbase
+		throw("renderer not implemented yet in View3D");
 	}
 
 	/**
@@ -225,7 +234,7 @@ export class View3D extends Sprite
 	public get deltaTime():number
 	{
 		//todo
-		return 0;
+		throw("deltaTime not implemented yet in View3D");
 	}
 
 	/**
@@ -289,6 +298,10 @@ export class View3D extends Sprite
 		this._view.y = this._globalPos.y;
 	}
 
+	public get visible()
+	{
+		return this._view.visible;
+	}
 	public set visible(value:boolean)
 	{
 		this._view.visible=value;
@@ -300,12 +313,14 @@ export class View3D extends Sprite
 	public get antiAlias():number
 	{
 		//todo
-		return 8;
+		console.log("antiAlias not implemented yet in View3D");
+		return 0;
 	}
 
 	public set antiAlias(value:number)
 	{
 		//todo
+		console.log("antiAlias not implemented yet in View3D");
 	}
 
 	/**
@@ -314,19 +329,16 @@ export class View3D extends Sprite
 	public get renderedFacesCount():number
 	{
 		//todo
-		return 0;
+		throw("renderedFacesCount not implemented yet in View3D");
 	}
-
 	/**
 	 * Defers control of Context3D clear() and present() calls to Stage3DProxy, enabling multiple Stage3D frameworks
 	 * to share the same Context3D object.
 	 */
 	public get shareContext():boolean
 	{
-		//todo
 		return this._view.shareContext;
 	}
-
 	public set shareContext(value:boolean)
 	{
 		this._view.shareContext=value;
@@ -343,6 +355,7 @@ export class View3D extends Sprite
 	public addSourceURL(url:string):void
 	{
 		//todo
+		throw("addSourceURL not implemented yet in View3D");
 	}
 
 	/**
@@ -359,6 +372,7 @@ export class View3D extends Sprite
 	public dispose():void
 	{
 		//todo
+		throw("dispose not implemented yet in View3D");
 	}
 
 	/**
@@ -369,8 +383,7 @@ export class View3D extends Sprite
 	 */
 	public project(point3d:Vector3D):Vector3D
 	{
-		//todo
-		return null;
+		return this._view.project(point3d);
 	}
 
 	/**
@@ -386,8 +399,11 @@ export class View3D extends Sprite
 	 */
 	public unproject(sX:number, sY:number, sZ:number, v:Vector3D = null):Vector3D
 	{
-		//todo
-		return null;
+		var newVec:Vector3D= this._view.unproject(sX, sY, sZ);
+		v.x=newVec.x;
+		v.y=newVec.y;
+		v.z=newVec.z;
+		return newVec;
 	}
 
 	/**
@@ -403,29 +419,30 @@ export class View3D extends Sprite
 	public getRay(sX:number, sY:number, sZ:number):Vector3D
 	{
 		//todo
-		return null;
+		throw("getRay not implemented yet in View3D");
 	}
 
 	public get mousePicker():any
 	{
 		// todo: any is IPicker
-		return null;
+		throw("mousePicker not implemented yet in View3D");
 	}
 
 	public set mousePicker(value:any)
 	{
-		// todo: any is IPicker
+		throw("mousePicker not implemented yet in View3D");
 	}
 
 	public get touchPicker():any
 	{
 		// todo: any is IPicker
-		return null;
+		throw("touchPicker not implemented yet in View3D");
 	}
 
 	public set touchPicker(value:any)
 	{
 		// todo: any is IPicker
+		throw("touchPicker not implemented yet in View3D");
 	}
 
 	// dead ends (overrides):

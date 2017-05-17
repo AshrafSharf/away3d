@@ -322,8 +322,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public getChildAt(index:number):ObjectContainer3D
 	{
-		//todo
-		return null;//(<ObjectContainer3D>this.adaptee.getChildAt(index).adapter);
+		return (<ObjectContainer3D>this.adaptee.getChildAt(index).adapter);
 	}
 
 	/**
