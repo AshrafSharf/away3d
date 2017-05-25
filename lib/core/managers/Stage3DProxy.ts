@@ -58,7 +58,7 @@ export class Stage3DProxy extends EventDispatcher
 		this._stage3D = stage3D;
 		this._stage3D.x = 0;
 		this._stage3D.y = 0;
-		//this._stage3D.visible = false;
+		this._stage3D.visible = false;
 		this._stage3DManager = stage3DManager;
 		this._forceSoftware = forceSoftware;
 		this._profile=profile;

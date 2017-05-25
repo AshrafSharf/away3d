@@ -37,8 +37,16 @@ export class View3D extends Sprite
 		this._renderer=renderer;
 		this._forceSoftware=forceSoftware;
 		this._profile=profile;
-
+		//this.adaptee.visible=false;
+		//this.adaptee.mouseEnabled=false;
 		this._scene = scene || new Scene3D();
+/*
+		this._view = new View(this._renderer);
+		//this._camera = new Camera3D();
+		this._view.camera = <Camera> this._camera.adaptee;
+		this._scene.adaptee=this._view.scene;
+		this._view.scene.adapter=this._scene;
+		*/
 	}
 
 
@@ -71,7 +79,9 @@ export class View3D extends Sprite
 
 	public set stage3DProxy(stage3DProxy:Stage3DProxy)
 	{
+
 		this._stage3DProxy=stage3DProxy;
+		
 		//create the view
 		this._renderer = new DefaultRenderer(stage3DProxy.stage3D);
 		this._renderer.renderableSorter = null;
@@ -81,6 +91,7 @@ export class View3D extends Sprite
 		this._view.camera = <Camera> this._camera.adaptee;
 		this._scene.adaptee=this._view.scene;
 		this._view.scene.adapter=this._scene;
+		
 	}
 
 
@@ -278,7 +289,6 @@ export class View3D extends Sprite
 	}
 	public set x(value:number)
 	{
-
 		this.adaptee.x=value;
 		this._localTLPos.x = value;
 		this._globalPos = this.adaptee.parent.localToGlobal(this._localTLPos);
