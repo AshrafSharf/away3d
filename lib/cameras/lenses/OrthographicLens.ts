@@ -1,5 +1,1 @@
-export class OrthographicLens {
-	constructor(param1:number){
-		
-	}
-}
+export {OrthographicProjection as OrthographicLens} from "@awayjs/core";

@@ -1,4 +1,4 @@
-
+import {Camera} from "@awayjs/scene";
 import { Sprite, Point, Rectangle, Vector3D, Transform } from "@as3web/flash"
 import { View } from "@awayjs/view";
 import { DefaultRenderer } from "@awayjs/renderer";
@@ -78,7 +78,7 @@ export class View3D extends Sprite
 
 		this._view = new View(this._renderer);
 		this._camera = new Camera3D();
-		this._view.camera = this._camera.adaptee;
+		this._view.camera = <Camera> this._camera.adaptee;
 		this._scene.adaptee=this._view.scene;
 		this._view.scene.adapter=this._scene;
 	}

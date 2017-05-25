@@ -1,19 +1,28 @@
-import {Camera as AwayCamera} from "@awayjs/scene";
+import {Camera} from "@awayjs/scene";
 import {Vector3D} from "@awayjs/core";
 import {ObjectContainer3D} from "../containers/ObjectContainer3D";
-export class Camera3D extends ObjectContainer3D{
+import {LensBase} from "./lenses/LensBase";
+
+export class Camera3D extends ObjectContainer3D
+{
 	
-	constructor(){
+	constructor()
+	{
 		super();
-		this.adaptee=new AwayCamera();
+
+		this.adaptee = new Camera();
 	}
-	public get adaptee():AwayCamera{
-		return (<AwayCamera>this._adaptee);
+
+	public get lens():LensBase
+	{
+		return (<Camera> this._adaptee).projection;
 	}
-	public set adaptee(value:AwayCamera){
-		this._adaptee=value;
+
+	public set lens(value:LensBase)
+	{
+		(<Camera> this._adaptee).projection = value;
 	}
-	public lens:any;
+
 	public forwardVector:Vector3D;
 	public upVector:Vector3D;
 }

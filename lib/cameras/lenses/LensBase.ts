@@ -1,1 +1,1 @@
-export class LensBase {}
+export {ProjectionBase as LensBase} from "@awayjs/core";
