@@ -1,5 +1,5 @@
-
-import {Billboard} from "@awayjs/scene"
+import {Vector3D} from "@awayjs/core"
+import {Billboard, AlignmentMode} from "@awayjs/scene"
 import {MethodMaterial} from "@awayjs/materials"
 import {IMaterial} from "@awayjs/graphics"
 import {Entity} from "./Entity"
@@ -10,10 +10,13 @@ export class Sprite3D extends Entity{
 
 	constructor(mat:IMaterial, width:number, height:number){
 		super();
-		this.adaptee=new Billboard(mat);
+		this.adaptee = new Billboard(mat);
+		this.adaptee.alignmentMode = AlignmentMode.REGISTRATION_POINT;
 		this.adaptee.adapter=this;
 		this.adaptee.width=width;
 		this.adaptee.height=height;
+
+		this.adaptee.registrationPoint = new Vector3D(width/2, height/2, 0)
 	}
 	public get material():IMaterial
 	{
