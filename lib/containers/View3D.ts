@@ -138,8 +138,17 @@ export class View3D extends Sprite
 		this._view.layeredView=value;
 	}
 
+	public get disableMouseEvents():boolean
+	{
+		return this._view.disableMouseEvents;
+	}
 
-	/**
+	public set disableMouseEvents(value:boolean)
+	{
+		this._view.disableMouseEvents = value;
+	}
+
+		/**
 	 * Not supported. Use filters3d instead.
 	 */
 	public get filters():any[]
