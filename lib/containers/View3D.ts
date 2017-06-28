@@ -317,15 +317,6 @@ export class View3D extends Sprite
 		this._view.y = this._globalPos.y;
 	}
 
-	public get visible()
-	{
-		return this._view.visible;
-	}
-	public set visible(value:boolean)
-	{
-		this._view.visible=value;
-	}
-
 	/**
 	 * The amount of anti-aliasing to be used.
 	 */
@@ -349,18 +340,6 @@ export class View3D extends Sprite
 	{
 		//todo
 		throw("renderedFacesCount not implemented yet in View3D");
-	}
-	/**
-	 * Defers control of Context3D clear() and present() calls to Stage3DProxy, enabling multiple Stage3D frameworks
-	 * to share the same Context3D object.
-	 */
-	public get shareContext():boolean
-	{
-		return this._view.shareContext;
-	}
-	public set shareContext(value:boolean)
-	{
-		this._view.shareContext=value;
 	}
 
 
