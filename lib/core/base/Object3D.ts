@@ -503,7 +503,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public rotateTo(ax:number, ay:number, az:number):void
 	{
-		//todo
+		this.adaptee.transform.rotateTo(ax, ay, az);
 	}
 
 	/**
