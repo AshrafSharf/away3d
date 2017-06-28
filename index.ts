@@ -47,6 +47,7 @@ export { Vector3DUtils} from './lib/core/math/Vector3DUtils';
 export { Quaternion} from './lib/core/math/Quaternion';
 export { Stage3DProxy} from './lib/core/managers/Stage3DProxy';
 export { Stage3DManager} from './lib/core/managers/Stage3DManager';
+export { DefaultRenderer} from './lib/core/render/DefaultRenderer';
 export { Face} from './lib/core/base/data/Face';
 export { SubMesh} from './lib/core/base/SubMesh';
 export { SubGeometry} from './lib/core/base/SubGeometry';
