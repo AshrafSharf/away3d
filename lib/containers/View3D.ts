@@ -323,14 +323,14 @@ export class View3D extends Sprite
 	public get antiAlias():number
 	{
 		//todo
-		console.log("antiAlias not implemented yet in View3D");
+		//console.log("antiAlias not implemented yet in View3D");
 		return 0;
 	}
 
 	public set antiAlias(value:number)
 	{
 		//todo
-		console.log("antiAlias not implemented yet in View3D");
+		//console.log("antiAlias not implemented yet in View3D");
 	}
 
 	/**

@@ -25,7 +25,7 @@ export class Stage3DManager {
 		return Stage3DManager._instances[stage];
 	}
 	public getFreeStage3DProxy(forceSoftware:boolean = false, profile:string = "baseline"):Stage3DProxy{
-		console.log("getFreeStage3DProxy not implemented yet in Stage3DManager");
+		//console.log("getFreeStage3DProxy not implemented yet in Stage3DManager");
 
 		var awayStage:AwayStage=AwayStageManager.getInstance().getStageAt(0);
 		if((<any>awayStage).adaptee){
