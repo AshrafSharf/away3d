@@ -95,6 +95,9 @@ export class View3D extends Sprite
 	}
 
 
+	public shareContext:boolean; //doesn't do anything here
+
+
 	/**
 	 * Forces mouse-move related events even when the mouse hasn't moved. This allows mouseOver and mouseOut events
 	 * etc to be triggered due to changes in the scene graph. Defaults to false.
