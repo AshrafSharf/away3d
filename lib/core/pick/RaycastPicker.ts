@@ -1,1 +1,1 @@
-export class RaycastPicker {}
+export {RaycastPicker} from "@awayjs/view";
