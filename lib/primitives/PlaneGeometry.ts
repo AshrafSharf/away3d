@@ -6,6 +6,32 @@ export class PlaneGeometry extends PrimitiveBase
 {
 
 	/**
+	 *
+	 */
+	public get height():number
+	{
+		return (<PrimitivePlanePrefab> this._prefab).height;
+	}
+
+	public set height(value:number)
+	{
+		(<PrimitivePlanePrefab> this._prefab).height = value;
+	}
+
+	/**
+	 *
+	 */
+	public get width():number
+	{
+		return (<PrimitivePlanePrefab> this._prefab).width;
+	}
+
+	public set width(value:number)
+	{
+		(<PrimitivePlanePrefab> this._prefab).width = value;
+	}
+
+	/**
 	 * Creates a new Plane object.
 	 * @param width The width of the plane.
 	 * @param height The height of the plane.

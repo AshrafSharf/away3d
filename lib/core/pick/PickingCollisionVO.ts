@@ -1,1 +1,1 @@
-export class PickingCollisionVO {}
+export {PickingCollision as PickingCollisionVO} from "@awayjs/graphics";

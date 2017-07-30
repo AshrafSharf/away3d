@@ -3,6 +3,11 @@ import {PrimitivePlanePrefab, PrimitivePrefabBase} from "@awayjs/scene"
 import {Sprite} from "@awayjs/scene"
 export class PrimitiveBase extends Geometry
 {
+	public scaleUV(scaleU:number, scaleV:number)
+	{
+		this._prefab.scaleU = scaleU;
+		this._prefab.scaleV = scaleV;
+	}
 
 	protected _prefab:PrimitivePrefabBase;
 	/**
