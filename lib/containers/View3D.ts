@@ -26,6 +26,11 @@ export class View3D extends Sprite
 	private _localBRPos:Point;
 	private _globalPos:Point;
 
+	public get view():View
+	{
+		return this._view;
+	}
+
 	constructor(scene:Scene3D = null, camera:Camera3D = null, renderer:DefaultRenderer = null, forceSoftware:boolean = false, profile:string = "baseline"){
 		super();
 		//this._profile = profile;
