@@ -119,12 +119,12 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	public get material():MaterialBase
 	{
-		return this._material;
+		return <MaterialBase> this.adaptee.material;
 	}
 
 	public set material(value:MaterialBase)
 	{
-		//todo: set material.adaptee on this.adaptee
+		this.adaptee.material = value;
 	}
 
 	/**
