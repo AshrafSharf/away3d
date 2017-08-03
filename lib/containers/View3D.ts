@@ -405,11 +405,7 @@ export class View3D extends Sprite
 	 */
 	public unproject(sX:number, sY:number, sZ:number, v:Vector3D = null):Vector3D
 	{
-		var newVec:Vector3D= this._view.unproject(sX, sY, sZ);
-		v.x=newVec.x;
-		v.y=newVec.y;
-		v.z=newVec.z;
-		return newVec;
+		return this._view.unproject(sX, sY, sZ, v);
 	}
 
 	/**
