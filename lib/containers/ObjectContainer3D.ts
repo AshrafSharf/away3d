@@ -374,11 +374,5 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 		// todo
 		return null;
 	}
-
-	public rotate(axis:Vector3D, angle:number):void
-	{
-		//todo
-	}
-
 }
 

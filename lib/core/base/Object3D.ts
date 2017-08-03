@@ -81,11 +81,13 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	}
 
-	public get adaptee():DisplayObject{
+	public get adaptee():DisplayObject
+	{
 		return (<DisplayObject>this._adaptee);
 	}
-	public set adaptee(value:DisplayObject){
-		this._adaptee=value;
+	public set adaptee(value:DisplayObject)
+	{
+		this._adaptee = value;
 	}
 
 	/**
@@ -103,7 +105,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set x(val:number)
 	{
-		this.adaptee.x=val;
+		this.adaptee.x = val;
 	}
 
 	/**
@@ -116,7 +118,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set y(val:number)
 	{
-		this.adaptee.y=val;
+		this.adaptee.y = val;
 	}
 
 	/**
@@ -129,7 +131,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set z(val:number)
 	{
-		this.adaptee.z=val;
+		this.adaptee.z = val;
 	}
 
 	/**
@@ -142,7 +144,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set rotationX(val:number)
 	{
-		this.adaptee.rotationX=val;
+		this.adaptee.rotationX = val;
 	}
 
 	/**
@@ -155,7 +157,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set rotationY(val:number)
 	{
-		this.adaptee.rotationY=val;
+		this.adaptee.rotationY = val;
 	}
 
 	/**
@@ -168,7 +170,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set rotationZ(val:number)
 	{
-		this.adaptee.rotationZ=val;
+		this.adaptee.rotationZ = val;
 	}
 
 	/**
@@ -181,7 +183,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set scaleX(val:number)
 	{
-		this.adaptee.scaleX=val;
+		this.adaptee.scaleX = val;
 	}
 
 	/**
@@ -194,7 +196,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set scaleY(val:number)
 	{
-		this.adaptee.scaleY=val;
+		this.adaptee.scaleY = val;
 	}
 
 	/**
@@ -207,7 +209,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set scaleZ(val:number)
 	{
-		this.adaptee.scaleZ=val;
+		this.adaptee.scaleZ = val;
 	}
 
 	/**
@@ -220,7 +222,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set eulers(value:Vector3D)
 	{
-		this.adaptee.eulers=value;
+		this.adaptee.eulers = value;
 	}
 
 	/**
@@ -233,8 +235,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set transform(val:Matrix3D)
 	{
-
-		this.adaptee.transform.matrix3D=val;
+		this.adaptee.transform.matrix3D = val;
 	}
 
 	/**
@@ -261,8 +262,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 
 	public set position(value:Vector3D)
 	{
-		//todo
-		//this.adaptee.transform.position=value;
+		this.adaptee.transform.moveTo(value.x, value.y, value.z);
 	}
 
 	/**
@@ -280,8 +280,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public get forwardVector():Vector3D
 	{
-		//todo
-		return null;//Matrix3DUtils.getForward(this.transform);
+		return this.adaptee.transform.forwardVector;
 	}
 
 	/**
@@ -289,8 +288,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public get rightVector():Vector3D
 	{
-		//todo
-		return null;//Matrix3DUtils.getRight(this.transform);
+		return this.adaptee.transform.rightVector;
 	}
 
 	/**
@@ -298,8 +296,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public get upVector():Vector3D
 	{
-		//todo
-		return null;//Matrix3DUtils.getUp(this.transform);
+		return this.adaptee.transform.upVector;
 	}
 
 	/**
@@ -307,8 +304,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public get backVector():Vector3D
 	{
-		//todo
-		return null;
+		return this.adaptee.transform.backVector;
 	}
 
 	/**
@@ -316,8 +312,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public get leftVector():Vector3D
 	{
-		//todo
-		return null;
+		return this.adaptee.transform.leftVector;
 	}
 
 	/**
@@ -325,8 +320,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public get downVector():Vector3D
 	{
-		//todo
-		return null;
+		return this.adaptee.transform.downVector;
 	}
 
 	/**
@@ -342,8 +336,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public scale(value:number):void
 	{
-		//todo
-		// this.adaptee.scale;
+		this.adaptee.transform.scaleTo(value, value, value);
 	}
 
 	/**
@@ -353,8 +346,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public moveForward(distance:number):void
 	{
-		//todo
-		//this.translateLocal(Vector3D.Z_AXIS, distance);
+		this.adaptee.transform.moveForward(distance);
 	}
 
 	/**
@@ -364,8 +356,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public moveBackward(distance:number):void
 	{
-		//todo
-		//this.translateLocal(Vector3D.Z_AXIS, -distance);
+		this.adaptee.transform.moveBackward(distance);
 	}
 
 	/**
@@ -375,8 +366,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public moveLeft(distance:number):void
 	{
-		//todo
-		//this.translateLocal(Vector3D.X_AXIS, -distance);
+		this.adaptee.transform.moveLeft(distance);
 	}
 
 	/**
@@ -386,8 +376,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public moveRight(distance:number):void
 	{
-		//todo
-		//this.translateLocal(Vector3D.X_AXIS, distance);
+		this.adaptee.transform.moveRight(distance);
 	}
 
 	/**
@@ -397,8 +386,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public moveUp(distance:number):void
 	{
-		//todo
-		//this.translateLocal(Vector3D.Y_AXIS, distance);
+		this.adaptee.transform.moveUp(distance);
 	}
 
 	/**
@@ -408,8 +396,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public moveDown(distance:number):void
 	{
-		//todo
-		//this.translateLocal(Vector3D.Y_AXIS, -distance);
+		this.adaptee.transform.moveDown(distance);
 	}
 
 	/**
@@ -421,7 +408,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public moveTo(dx:number, dy:number, dz:number):void
 	{
-		//todo
+		this.adaptee.transform.moveTo(dx, dy, dz);
 	}
 
 	/**
@@ -444,7 +431,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public translate(axis:Vector3D, distance:number):void
 	{
-		//todo
+		this.adaptee.transform.translate(axis, distance);
 	}
 
 	/**
@@ -455,7 +442,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public translateLocal(axis:Vector3D, distance:number):void
 	{
-		//todo
+		this.adaptee.transform.translateLocal(axis, distance);
 	}
 
 	/**
@@ -465,7 +452,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public pitch(angle:number):void
 	{
-		//todo
+		this.adaptee.transform.pitch(angle);
 	}
 
 	/**
@@ -475,7 +462,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public yaw(angle:number):void
 	{
-		//todo
+		this.adaptee.transform.yaw(angle);
 	}
 
 	/**
@@ -485,7 +472,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public roll(angle:number):void
 	{
-		//todo
+		this.adaptee.transform.roll(angle);
 	}
 
 	public clone(newAdaptee:DisplayObject=null):Object3D
@@ -514,7 +501,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public rotate(axis:Vector3D, angle:number):void
 	{
-		//todo
+		this.adaptee.transform.rotate(axis, angle);
 	}
 
 	/**
@@ -525,7 +512,7 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 	 */
 	public lookAt(target:Vector3D, upAxis:Vector3D = null):void
 	{
-		//todo
+		this.adaptee.lookAt(target, upAxis);
 	}
 
 	/**
