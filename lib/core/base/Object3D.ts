@@ -90,6 +90,16 @@ export class Object3D extends NamedAssetBase implements IDisplayObjectAdapter
 		this._adaptee = value;
 	}
 
+	public get name():string
+	{
+		return (<DisplayObject>this._adaptee).name;
+	}
+
+	public set name(val:string)
+	{
+		(<DisplayObject>this._adaptee).name = val;
+	}
+
 	/**
 	 * An object that can contain any extra data.
 	 */
