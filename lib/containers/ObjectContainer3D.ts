@@ -262,6 +262,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 		if(adaptee==null){
 			this.adaptee=new DisplayObjectContainer();
 			this.adaptee.adapter=this;
+			this.adaptee.mouseEnabled = false;
 		}
 	}
 

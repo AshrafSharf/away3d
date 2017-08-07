@@ -47,6 +47,7 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 			this.adaptee=new Sprite();
 
 		}
+		this.adaptee.mouseEnabled = false;
 		this.adaptee.adapter=this;
 	}
 
