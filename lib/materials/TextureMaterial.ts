@@ -21,11 +21,40 @@ export class TextureMaterial extends ColorMaterial
 		this._sampler.repeat = value;
 	}
 
-	constructor(texture:Texture2DBase, smooth:boolean = true, repeat:boolean = false, mipmap:boolean = false)
+	/**
+	 *
+	 */
+	public get mipmap():boolean
+	{
+		return this._sampler.mipmap;
+	}
+
+	public set mipmap(value:boolean)
+	{
+		this._sampler.mipmap = value;
+	}
+
+	/**
+	 *
+	 */
+	public get smooth():boolean
+	{
+		return this._sampler.smooth;
+	}
+
+	public set smooth(value:boolean)
+	{
+		this._sampler.smooth = value;
+	}
+
+	constructor(texture:Texture2DBase, smooth:boolean = true, repeat:boolean = false, mipmap:boolean = true)
 	{
 		super();
 
 		this._sampler = new Sampler2D();
+		this._sampler.smooth = smooth;
+		this._sampler.repeat = repeat;
+		this._sampler.mipmap = mipmap;
 
 		this.ambientMethod.texture = texture.adaptee;
 		this.ambientMethod.texture.setSamplerAt(this._sampler, 0);
