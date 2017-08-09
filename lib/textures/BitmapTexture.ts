@@ -1,6 +1,5 @@
 import {Single2DTexture} from "@awayjs/graphics";
 import {BitmapData} from "@as3web/flash";
-import {BitmapDisplayObject} from "@as3web/flash";
 
 import {Texture2DBase} from "./Texture2DBase";
 
@@ -8,7 +7,7 @@ export class BitmapTexture extends Texture2DBase
 {
 	private _bitmapData:BitmapData;
 
-	constructor(bitmapData:BitmapData | BitmapDisplayObject, generateMipmaps:boolean = true)
+	constructor(bitmapData:BitmapData, generateMipmaps:boolean = true)
 	{
 		super();
 
