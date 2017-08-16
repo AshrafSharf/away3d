@@ -349,7 +349,7 @@ export class ObjectContainer3D extends Object3D implements IAsset
 	 */
 	public clone():Object3D
 	{
-		return new ObjectContainer3D(<DisplayObjectContainer> this._adaptee.clone());
+		return new ObjectContainer3D((<DisplayObjectContainer> this._adaptee).clone());
 	}
 }
 

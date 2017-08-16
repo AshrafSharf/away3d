@@ -37,7 +37,8 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 		if(this.geometry){
 			if(this.geometry.isPrefab){
 				this.adaptee=(<PrimitiveBase>this.geometry).getSprite();
-				this.adaptee.material=(<IMaterial>material);
+				this._material = material;
+				this.adaptee.material=(<IMaterial>material.adaptee);
 			}
 			else{
 				//todo;
@@ -119,12 +120,14 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	public get material():MaterialBase
 	{
-		return <MaterialBase> this.adaptee.material;
+		return this._material;
 	}
 
 	public set material(value:MaterialBase)
 	{
-		this.adaptee.material = value;
+		this._material = value;
+
+		this.adaptee.material = value.adaptee;
 	}
 
 	/**

@@ -18,8 +18,8 @@ export class TextureMaterial extends MaterialBase
 		this._sampler.mipmap = mipmap;
 
 		this._texture = texture;
-		this.ambientMethod.texture = texture.adaptee;
-		this.ambientMethod.texture.setSamplerAt(this._sampler, 0);
+		this._adaptee.ambientMethod.texture = texture.adaptee;
+		this._adaptee.ambientMethod.texture.setSamplerAt(this._sampler, 0);
 	}
 
 
@@ -30,6 +30,6 @@ export class TextureMaterial extends MaterialBase
 
 	public set texture(value:Texture2DBase)
 	{
-		this.ambientMethod.texture = value.adaptee;
+		this._adaptee.ambientMethod.texture = value.adaptee;
 	}
 }

@@ -456,7 +456,7 @@ export class Object3D extends NamedAssetBase implements IAssetAdapter
 
 	public clone():Object3D
 	{
-		return new Object3D(<DisplayObject> this._adaptee.clone());
+		return new Object3D((<DisplayObject> this._adaptee).clone());
 	}
 
 	/**
