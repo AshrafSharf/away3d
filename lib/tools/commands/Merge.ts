@@ -1,1 +1,1 @@
-export class Merge {}
+export {Merge} from "@awayjs/scene";

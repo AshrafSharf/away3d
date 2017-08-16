@@ -1,4 +1,4 @@
-import { Single2DTexture, Sampler2D } from "@awayjs/graphics"
+import { Single2DTexture, Sampler2D } from "@awayjs/graphics";
 
 import {Texture2DBase} from "../textures/Texture2DBase";
 
@@ -23,6 +23,10 @@ export class TextureMaterial extends MaterialBase
 	}
 
 
+	/**
+	 *
+	 * @returns {Texture2DBase}
+	 */
 	public get texture():Texture2DBase
 	{
 		return this._texture;
