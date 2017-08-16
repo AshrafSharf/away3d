@@ -1,0 +1,1 @@
+export {ParserBase} from "@awayjs/core";

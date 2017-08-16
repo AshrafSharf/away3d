@@ -1,0 +1,1 @@
+export {Loader as AssetLoader} from "@awayjs/core";

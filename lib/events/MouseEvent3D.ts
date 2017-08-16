@@ -1,1 +1,1 @@
-export class MouseEvent3D {}
+export {MouseEvent as MouseEvent3D} from "@awayjs/scene";

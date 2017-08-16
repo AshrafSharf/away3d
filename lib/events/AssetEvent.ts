@@ -1,1 +1,1 @@
-export class AssetEvent {}
+export {AssetEvent} from "@awayjs/core";

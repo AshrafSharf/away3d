@@ -1,6 +1,6 @@
 import {Vector3D} from "@awayjs/core";
 
-import {LookAtController as AwayLookAtController} from "@awayjs/scene";
+import {LookAtController as AwayLookAtController, DisplayObject} from "@awayjs/scene";
 
 import {ControllerBase} from "./ControllerBase";
 
@@ -20,7 +20,7 @@ export class LookAtController extends ControllerBase
 		super(targetObject);
 
 		if (this.assetType == LookAtController.assetType)
-			this._adaptee = new AwayLookAtController(targetObject.adaptee, lookAtObject.adaptee);
+			this._adaptee = new AwayLookAtController(<DisplayObject> targetObject.adaptee, <DisplayObject> lookAtObject.adaptee);
 	}
 
 	public get lookAtPosition():Vector3D
@@ -41,6 +41,6 @@ export class LookAtController extends ControllerBase
 
 	public set lookAtObject(val:Object3D)
 	{
-		(<AwayLookAtController> this._adaptee).lookAtObject = val.adaptee;
+		(<AwayLookAtController> this._adaptee).lookAtObject = <DisplayObject> val.adaptee;
 	}
 }

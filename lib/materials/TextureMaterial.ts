@@ -2,62 +2,34 @@ import { Single2DTexture, Sampler2D } from "@awayjs/graphics"
 
 import {Texture2DBase} from "../textures/Texture2DBase";
 
-import {ColorMaterial} from "./ColorMaterial";
+import {MaterialBase} from "./MaterialBase";
 
-export class TextureMaterial extends ColorMaterial
+export class TextureMaterial extends MaterialBase
 {
-	private _sampler:Sampler2D;
-
-	/**
-	 *
-	 */
-	public get repeat():boolean
-	{
-		return this._sampler.repeat;
-	}
-
-	public set repeat(value:boolean)
-	{
-		this._sampler.repeat = value;
-	}
-
-	/**
-	 *
-	 */
-	public get mipmap():boolean
-	{
-		return this._sampler.mipmap;
-	}
-
-	public set mipmap(value:boolean)
-	{
-		this._sampler.mipmap = value;
-	}
-
-	/**
-	 *
-	 */
-	public get smooth():boolean
-	{
-		return this._sampler.smooth;
-	}
-
-	public set smooth(value:boolean)
-	{
-		this._sampler.smooth = value;
-	}
+	private _texture:Texture2DBase;
 
 	constructor(texture:Texture2DBase, smooth:boolean = true, repeat:boolean = false, mipmap:boolean = true)
 	{
 		super();
 
-		this._sampler = new Sampler2D();
+		this._sampler
 		this._sampler.smooth = smooth;
 		this._sampler.repeat = repeat;
 		this._sampler.mipmap = mipmap;
 
+		this._texture = texture;
 		this.ambientMethod.texture = texture.adaptee;
 		this.ambientMethod.texture.setSamplerAt(this._sampler, 0);
 	}
 
+
+	public get texture():Texture2DBase
+	{
+		return this._texture;
+	}
+
+	public set texture(value:Texture2DBase)
+	{
+		this.ambientMethod.texture = value.adaptee;
+	}
 }

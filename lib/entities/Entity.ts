@@ -4,7 +4,7 @@ import { Scene } from "@awayjs/scene";
 
 import { ObjectContainer3D } from "../containers/ObjectContainer3D";
 import { Scene3D } from "../containers/Scene3D";
-
+import { AssetType } from "../library/assets/AssetType";
 
 /**
  * The Entity class provides an abstract base class for all scene graph objects that are considered having a
@@ -170,8 +170,7 @@ export class Entity extends ObjectContainer3D
 
 	public get assetType():string
 	{
-		//todo
-		return "";//AssetType.ENTITY;
+		return AssetType.ENTITY;
 	}
 
 	/**

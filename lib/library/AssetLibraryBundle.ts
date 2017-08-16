@@ -1,1 +1,1 @@
-export class AssetLibraryBundle {}
+export {AssetLibraryBundle} from "@awayjs/core";

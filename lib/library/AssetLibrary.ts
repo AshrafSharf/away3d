@@ -1,5 +1,1 @@
-export class AssetLibrary {
-	public static getBundle(param:string):any{
-		return null;
-	};
-}
+export {AssetLibrary} from "@awayjs/core";

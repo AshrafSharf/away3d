@@ -1,1 +1,1 @@
-export class LoaderEvent {}
+export {LoaderEvent} from "@awayjs/core";

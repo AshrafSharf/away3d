@@ -1,0 +1,1 @@
+export {ParserDataFormat} from "@awayjs/core";

@@ -1,27 +1,35 @@
-
-import {AssetEvent} from "../../events/AssetEvent";
+import {AssetBase, IAssetAdapter} from "@awayjs/core";
 
 import { EventDispatcher } from "@as3web/flash"
 
-export class NamedAssetBase extends EventDispatcher
+export class NamedAssetBase extends EventDispatcher implements IAssetAdapter
 {
-	private _originalName:string;
-	private _namespace:string;
-	private _name:string;
+	protected _adaptee:AssetBase;
+
 	private _id:string;
-	private _full_path:any[];
 
-	public static DEFAULT_NAMESPACE:string = 'default';
-
-	constructor(name:string = null){
+	constructor(adaptee:AssetBase = null)
+	{
 		super();
-		if (name == null)
-			name = 'null';
 
-		this._name = name;
-		this._originalName = name;
+		this._adaptee = adaptee || new AssetBase();
+		this._adaptee.adapter = this;
+	}
 
-		this.updateFullPath();
+
+	public get adaptee():AssetBase
+	{
+		return this._adaptee;
+	}
+
+	public get name():string
+	{
+		return this._adaptee.name;
+	}
+
+	public set name(val:string)
+	{
+		this._adaptee.name = val;
 	}
 
 	/**
@@ -31,7 +39,7 @@ export class NamedAssetBase extends EventDispatcher
 	 */
 	public get originalName():string
 	{
-		return this._originalName;
+		return this._adaptee.originalName;
 	}
 
 	public get id():string
@@ -44,55 +52,32 @@ export class NamedAssetBase extends EventDispatcher
 		this._id = newID;
 	}
 
-	public get name():string
-	{
-		return this._name;
-	}
-
-	public set name(val:string)
-	{
-		var prev:string;
-
-		prev = this._name;
-		this._name = val;
-		if (this._name == null)
-			this._name = 'null';
-
-		this.updateFullPath();
-
-		//if (this.hasEventListener(AssetEvent.ASSET_RENAME))
-		//	this.dispatchEvent(new AssetEvent(AssetEvent.ASSET_RENAME, <IAsset>(this), prev));
-	}
-
 	public get assetNamespace():string
 	{
-		return this._namespace;
+		return this._adaptee.assetNamespace;
 	}
 
 	public get assetFullPath():any[]
 	{
-		return this._full_path;
+		return this._adaptee.assetFullPath;
 	}
 
 	public assetPathEquals(name:string, ns:string):boolean
 	{
-		return (this._name == name && (!ns || this._namespace == ns));
+		return this._adaptee.assetPathEquals(name, ns);
 	}
 
 	public resetAssetPath(name:string, ns:string = null, overrideOriginal:boolean = true):void
 	{
-		this._name = name? name : 'null';
-		this._namespace = ns? ns : NamedAssetBase.DEFAULT_NAMESPACE;
-		if (overrideOriginal)
-			this._originalName = this._name;
-
-		this.updateFullPath();
+		this._adaptee.resetAssetPath(name, ns, overrideOriginal);
 	}
 
-	private updateFullPath():void
+	public dispose()
 	{
-		this._full_path = [this._namespace, this._name];
+		this._adaptee.dispose()
+		this._adaptee = null;
 	}
+
 }
 
 

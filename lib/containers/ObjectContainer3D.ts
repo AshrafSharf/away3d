@@ -1,9 +1,10 @@
 
-import {IDisplayObjectAdapter, DisplayObjectContainer} from "@awayjs/scene"
-import {Vector3D, Matrix3D} from "@awayjs/core"
+import {IDisplayObjectAdapter, DisplayObjectContainer, DisplayObject} from "@awayjs/scene"
+import {Vector3D, Matrix3D} from "@as3web/flash"
 import { Scene3D } from "./Scene3D";
 import { Object3D } from "../core/base/Object3D";
-
+import { AssetType } from "../library/assets/AssetType";
+import { IAsset } from "../library/assets/IAsset";
 
 
 
@@ -64,17 +65,8 @@ import { Object3D } from "../core/base/Object3D";
  * ObjectContainer3D can have its own scene partition assigned. However, when assigned to a different scene,
  * it will loose any partition information, since partitions are tied to a scene.
  */
-export class ObjectContainer3D extends Object3D //implements IAsset
+export class ObjectContainer3D extends Object3D implements IAsset
 {
-
-	public get adaptee():DisplayObjectContainer
-	{
-		return (<DisplayObjectContainer>this._adaptee);
-	}
-	public set adaptee(value:DisplayObjectContainer)
-	{
-		this._adaptee=value;
-	}
 	/**
 	 * Does not apply any transformations to this object. Allows static objects to be described in world coordinates without any matrix calculations.
 	 */
@@ -95,12 +87,12 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get mouseEnabled():boolean
 	{
-		return this.adaptee.mouseEnabled;
+		return (<DisplayObjectContainer> this._adaptee).mouseEnabled;
 	}
 
 	public set mouseEnabled(value:boolean)
 	{
-		this.adaptee.mouseEnabled = value;
+		(<DisplayObjectContainer> this._adaptee).mouseEnabled = value;
 	}
 
 
@@ -109,12 +101,12 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get mouseChildren():boolean
 	{
-		return this.adaptee.mouseChildren;
+		return (<DisplayObjectContainer> this._adaptee).mouseChildren;
 	}
 
 	public set mouseChildren(value:boolean)
 	{
-		this.adaptee.mouseChildren = value;
+		(<DisplayObjectContainer> this._adaptee).mouseChildren = value;
 	}
 
 	/**
@@ -122,18 +114,17 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get visible():boolean
 	{
-		return this.adaptee.visible;
+		return (<DisplayObjectContainer> this._adaptee).visible;
 	}
 
 	public set visible(value:boolean)
 	{
-		this.adaptee.visible=value;
+		(<DisplayObjectContainer> this._adaptee).visible=value;
 	}
 
 	public get assetType():string
 	{
-		//todo
-		return "";//AssetType.CONTAINER;
+		return AssetType.CONTAINER;
 	}
 
 	/**
@@ -141,7 +132,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get scenePosition():Vector3D
 	{
-		return this.adaptee.scenePosition;
+		return (<DisplayObjectContainer> this._adaptee).scenePosition;
 	}
 
 	/**
@@ -218,8 +209,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get sceneTransform():Matrix3D
 	{
-		//todo
-		return null;//this.adaptee.transform;
+		return (<DisplayObjectContainer> this._adaptee).transform.concatenatedMatrix3D;
 	}
 
 	/**
@@ -241,8 +231,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get inverseSceneTransform():Matrix3D
 	{
-		//todo
-		return null;//this.adaptee.transform;
+		return (<DisplayObjectContainer> this._adaptee).transform.inverseConcatenatedMatrix3D;
 	}
 
 	/**
@@ -250,25 +239,22 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get parent():ObjectContainer3D
 	{
-		//todo
-		return null;//(<IDisplayObjectAdapter>this.adaptee.parent.adapter);
+		return <ObjectContainer3D> (<DisplayObjectContainer> this._adaptee).parent.adapter;
 	}
 
 	/**
 	 * Creates a new ObjectContainer3D object.
 	 */
-	constructor(adaptee:DisplayObjectContainer=null){
-		super();
-		if(adaptee==null){
-			this.adaptee=new DisplayObjectContainer();
-			this.adaptee.adapter=this;
-			this.adaptee.mouseEnabled = false;
-		}
+	constructor(adaptee:DisplayObjectContainer = null)
+	{
+		super(adaptee || new DisplayObjectContainer());
+
+		(<DisplayObjectContainer> this._adaptee).mouseEnabled = false;
 	}
 
-	public contains(child:ObjectContainer3D):boolean
+	public contains(child:Object3D):boolean
 	{
-		return this.adaptee.getChildIndex(child.adaptee) >= 0;
+		return (<DisplayObjectContainer> this._adaptee).getChildIndex(<DisplayObject> child.adaptee) >= 0;
 	}
 
 	/**
@@ -277,9 +263,9 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 * @param child The object to be added as a child.
 	 * @return A reference to the added child object.
 	 */
-	public addChild(child:ObjectContainer3D):ObjectContainer3D
+	public addChild(child:Object3D):Object3D
 	{
-		this.adaptee.addChild(child.adaptee);
+		(<DisplayObjectContainer> this._adaptee).addChild(<DisplayObject> child.adaptee);
 		return child;
 	}
 
@@ -292,7 +278,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	{
 		let child:Object3D;
 		for  (child of childArray)
-			this.adaptee.addChild(child.adaptee);
+			(<DisplayObjectContainer> this._adaptee).addChild(<DisplayObject> child.adaptee);
 	}
 
 	/**
@@ -301,9 +287,9 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 * @param    child    The 3d object to be removed
 	 * @throws    Error    ObjectContainer3D.removeChild(null)
 	 */
-	public removeChild(child:ObjectContainer3D):void
+	public removeChild(child:Object3D):void
 	{
-		this.adaptee.removeChild(child.adaptee);
+		(<DisplayObjectContainer> this._adaptee).removeChild(<DisplayObject> child.adaptee);
 	}
 
 	/**
@@ -313,7 +299,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public removeChildAt(index:number):void
 	{
-		this.adaptee.removeChildAt(index);
+		(<DisplayObjectContainer> this._adaptee).removeChildAt(index);
 	}
 
 	/**
@@ -323,7 +309,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public getChildAt(index:number):ObjectContainer3D
 	{
-		return (<ObjectContainer3D>this.adaptee.getChildAt(index).adapter);
+		return <ObjectContainer3D> (<DisplayObjectContainer> this._adaptee).getChildAt(index).adapter;
 	}
 
 	/**
@@ -331,7 +317,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public get numChildren():number
 	{
-		return this.adaptee.numChildren;
+		return (<DisplayObjectContainer> this._adaptee).numChildren;
 
 	}
 
@@ -340,21 +326,12 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public lookAt(target:Vector3D, upAxis:Vector3D = null):void
 	{
-		this.adaptee.lookAt(target, upAxis);
+		(<DisplayObjectContainer> this._adaptee).lookAt(target, upAxis);
 	}
 
 	public translateLocal(axis:Vector3D, distance:number):void
 	{
-		// todo
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public dispose():void
-	{
-		// todo
-
+		(<DisplayObjectContainer> this._adaptee).transform.translateLocal(axis, distance);
 	}
 
 	/**
@@ -372,8 +349,7 @@ export class ObjectContainer3D extends Object3D //implements IAsset
 	 */
 	public clone():Object3D
 	{
-		// todo
-		return null;
+		return new ObjectContainer3D(<DisplayObjectContainer> this._adaptee.clone());
 	}
 }
 

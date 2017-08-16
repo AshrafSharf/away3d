@@ -8,9 +8,7 @@ export class Camera3D extends ObjectContainer3D
 	
 	constructor()
 	{
-		super();
-
-		this.adaptee = new Camera();
+		super(new Camera());
 	}
 
 	public get lens():LensBase
@@ -23,6 +21,13 @@ export class Camera3D extends ObjectContainer3D
 		(<Camera> this._adaptee).projection = value;
 	}
 
-	public forwardVector:Vector3D;
-	public upVector:Vector3D;
+	public project(vector3D: Vector3D): Vector3D
+	{
+		return (<Camera> this._adaptee).project(vector3D);
+	}
+
+	public unproject(nX: number, nY: number, sZ: number, target?: Vector3D): Vector3D
+	{
+		return (<Camera> this._adaptee).unproject(nX, nY, sZ, target);
+	}
 }

@@ -1,4 +1,4 @@
-import {ControllerBase as AwayControllerBase} from "@awayjs/scene";
+import {ControllerBase as AwayControllerBase, DisplayObject} from "@awayjs/scene";
 
 import {Object3D} from "../core/base/Object3D";
 
@@ -16,7 +16,7 @@ export class ControllerBase
 	constructor(targetObject:Object3D = null)
 	{
 		if (this.assetType == ControllerBase.assetType)
-			this._adaptee = new AwayControllerBase(targetObject.adaptee);
+			this._adaptee = new AwayControllerBase(<DisplayObject> targetObject.adaptee);
 	}
 
 	public get targetObject():Object3D
@@ -26,7 +26,7 @@ export class ControllerBase
 
 	public set targetObject(val:Object3D)
 	{
-		this._adaptee.targetObject = val.adaptee;
+		this._adaptee.targetObject = <DisplayObject> val.adaptee;
 	}
 
 	public get autoUpdate():boolean

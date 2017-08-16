@@ -65,8 +65,7 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 
 	public get assetType():string
 	{
-		//todo
-		return "";//AssetType.MESH;
+		return AssetType.MESH;
 	}
 
 	private onGeometryBoundsInvalid(event:any):void
