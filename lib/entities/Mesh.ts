@@ -121,7 +121,7 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	{
 		this._material = value;
 
-		(<Sprite> this._adaptee).material = value.adaptee;
+		(<Sprite> this._adaptee).material = value? value.adaptee : null;
 	}
 
 	/**
