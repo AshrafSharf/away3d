@@ -1,6 +1,6 @@
 
 import { Vector3D } from "@awayjs/core";
-import { Scene } from "@awayjs/scene";
+import { Scene, DisplayObjectContainer } from "@awayjs/scene";
 
 import { ObjectContainer3D } from "../containers/ObjectContainer3D";
 import { Scene3D } from "../containers/Scene3D";
@@ -194,8 +194,9 @@ export class Entity extends ObjectContainer3D
 	/**
 	 * Creates a new Entity object.
 	 */
-	constructor(){
-		super();
+	constructor(adaptee:DisplayObjectContainer = null)
+	{
+		super(adaptee);
 	}
 
 	/**

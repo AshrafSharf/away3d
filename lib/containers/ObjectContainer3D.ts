@@ -239,7 +239,7 @@ export class ObjectContainer3D extends Object3D implements IAsset
 	 */
 	public get parent():ObjectContainer3D
 	{
-		return <ObjectContainer3D> (<DisplayObjectContainer> this._adaptee).parent.adapter;
+		return <ObjectContainer3D> ((<DisplayObjectContainer> this._adaptee).parent? (<DisplayObjectContainer> this._adaptee).parent.adapter : null);
 	}
 
 	/**
@@ -248,8 +248,6 @@ export class ObjectContainer3D extends Object3D implements IAsset
 	constructor(adaptee:DisplayObjectContainer = null)
 	{
 		super(adaptee || new DisplayObjectContainer());
-
-		(<DisplayObjectContainer> this._adaptee).mouseEnabled = false;
 	}
 
 	public contains(child:Object3D):boolean

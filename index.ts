@@ -22,6 +22,7 @@ export { MultiPassMaterialBase} from './lib/materials/MultiPassMaterialBase';
 export { MaterialBase} from './lib/materials/MaterialBase';
 export { ColorMaterial} from './lib/materials/ColorMaterial';
 export {AssetLoaderContext} from "./lib/loaders/misc/AssetLoaderContext";
+export { AWDParser} from './lib/loaders/parsers/AWDParser';
 export { Parsers} from './lib/loaders/parsers/Parsers';
 export { Loader3D} from './lib/loaders/Loader3D';
 export { PointLight} from './lib/lights/PointLight';
@@ -39,6 +40,7 @@ export {NumSuffixConflictStrategy} from "./lib/library/naming/NumSuffixConflictS
 export {AssetLibraryIterator} from "./lib/library/utils/AssetLibraryIterator";
 export {AssetLibrary} from "./lib/library/AssetLibrary";
 export {AssetLibraryBundle} from "./lib/library/AssetLibraryBundle";
+export { Away3DSceneGraphFactory} from './lib/factories/Away3DSceneGraphFactory';
 export { DepthOfFieldFilter3D} from './lib/filters/DepthOfFieldFilter3D';
 export { LinearExtrude} from './lib/extrusions/LinearExtrude';
 export { Stage3DEvent} from './lib/events/Stage3DEvent';

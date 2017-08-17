@@ -31,32 +31,25 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 * @param material    [optional]        The material with which to render the Mesh.
 	 */
 	constructor(geometry:Geometry, material:MaterialBase = null){
-		super();
+		var adaptee:Sprite;
+		if(geometry){
+			if(geometry.isPrefab){
+				adaptee = (<PrimitiveBase>geometry).getSprite();
 
-		this.geometry = geometry;
-		if(this.geometry){
-			if(this.geometry.isPrefab){
-				this.adaptee=(<PrimitiveBase>this.geometry).getSprite();
-				this._material = material;
-				this.adaptee.material=(<IMaterial>material.adaptee);
+				adaptee.material = <IMaterial> material.adaptee;
 			}
 			else{
 				//todo;
 			}
 		}
 		else{
-			this.adaptee=new Sprite();
-
+			adaptee = Sprite.getNewSprite(material? <IMaterial> material.adaptee : null);
 		}
-		this.adaptee.mouseEnabled = false;
-		this.adaptee.adapter=this;
-	}
 
-	public get adaptee():Sprite{
-		return (<Sprite>this._adaptee);
-	}
-	public set adaptee(value:Sprite){
-		this._adaptee=value;
+		super(adaptee);
+
+		this._geometry = geometry;
+		this._material = material;
 	}
 
 	public bakeTransformations():void
@@ -79,12 +72,12 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	public get castsShadows():boolean
 	{
-		return this.adaptee.castsShadows;
+		return (<Sprite> this._adaptee).castsShadows;
 	}
 
 	public set castsShadows(value:boolean)
 	{
-		this.adaptee.castsShadows = value;
+		(<Sprite> this._adaptee).castsShadows = value;
 	}
 
 	/**
@@ -127,7 +120,7 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	{
 		this._material = value;
 
-		this.adaptee.material = value.adaptee;
+		(<Sprite> this._adaptee).material = value.adaptee;
 	}
 
 	/**
@@ -195,10 +188,13 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 * var clone : Mesh = new Mesh(original.geometry, original.material);
 	 * </code>
 	 */
-	public clone():Object3D
+	public clone():Mesh
 	{
-		//todo
-		return null;
+		var clone:Mesh = new Mesh(this._geometry, this._material);
+
+		(<Sprite> this._adaptee).copyTo(<Sprite> clone.adaptee);
+
+		return clone;
 	}
 
 

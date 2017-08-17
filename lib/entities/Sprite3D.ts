@@ -9,15 +9,13 @@ export class Sprite3D extends Entity
 	private _material:MaterialBase;
 
 	constructor(mat:MaterialBase, width:number, height:number){
-		super();
+		super(new Billboard(mat.adaptee));
 		this._material = mat;
-		this.adaptee = new Billboard(mat.adaptee);
-		this.adaptee.alignmentMode = AlignmentMode.REGISTRATION_POINT;
-		this.adaptee.adapter=this;
-		this.adaptee.width=width;
-		this.adaptee.height=height;
+		(<Billboard> this._adaptee).alignmentMode = AlignmentMode.REGISTRATION_POINT;
+		(<Billboard> this._adaptee).width = width;
+		(<Billboard> this._adaptee).height = height;
 
-		this.adaptee.registrationPoint = new Vector3D(width/2, height/2, 0)
+		(<Billboard> this._adaptee).registrationPoint = new Vector3D(width/2, height/2, 0)
 	}
 	public get material():MaterialBase
 	{
@@ -25,13 +23,8 @@ export class Sprite3D extends Entity
 	}
 	public set material(value:MaterialBase)
 	{
-		this.adaptee.material = value.adaptee;
-	}
+		this._material = value;
 
-	public get adaptee():Billboard{
-		return (<Billboard>this._adaptee);
-	}
-	public set adaptee(value:Billboard){
-		this._adaptee=value;
+		(<Billboard> this._adaptee).material = value.adaptee;
 	}
 }

@@ -307,6 +307,8 @@ export class Object3D extends NamedAssetBase implements IAssetAdapter
 	constructor(adaptee:DisplayObject = null)
 	{
 		super(adaptee || new DisplayObject());
+
+		(<DisplayObject> this._adaptee).mouseEnabled = false;
 	}
 
 	/**
