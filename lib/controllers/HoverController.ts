@@ -173,6 +173,6 @@ export class HoverController extends LookAtController
 		super(targetObject, lookAtObject);
 
 		if (this.assetType == HoverController.assetType)
-			this._adaptee = new AwayHoverController(<DisplayObject> targetObject.adaptee, <DisplayObject> lookAtObject.adaptee, panAngle, tiltAngle, distance, minTiltAngle, maxTiltAngle, minPanAngle, maxPanAngle, steps, yFactor, wrapPanAngle);
+			this._adaptee = new AwayHoverController((targetObject)?<DisplayObject> targetObject.adaptee:null, (lookAtObject)?<DisplayObject> lookAtObject.adaptee:null, panAngle, tiltAngle, distance, minTiltAngle, maxTiltAngle, minPanAngle, maxPanAngle, steps, yFactor, wrapPanAngle);
 	}
 }
