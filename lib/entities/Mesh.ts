@@ -36,7 +36,8 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 			if(geometry.isPrefab){
 				adaptee = (<PrimitiveBase>geometry).getSprite();
 
-				adaptee.material = <IMaterial> material.adaptee;
+				if (material)
+					adaptee.material = <IMaterial> material.adaptee;
 			}
 			else{
 				//todo;
