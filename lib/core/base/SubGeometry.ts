@@ -1,5 +1,13 @@
-import {TriangleElements} from "@awayjs/graphics"
-export class SubGeometry extends  TriangleElements{
+import {TriangleElements} from "@awayjs/graphics";
+
+export class SubGeometry
+{
+	private _adaptee:TriangleElements;
+
+	public get adaptee():TriangleElements
+	{
+		return this._adaptee;
+	}
 	public autoDeriveVertexNormals:boolean;
 	public autoDeriveVertexTangents:boolean;
 	public get vertexData():any[]{
@@ -19,5 +27,10 @@ export class SubGeometry extends  TriangleElements{
 	}
 	public updateVertexTangentData(verts:any){
 		
+	}
+
+	constructor(adaptee:TriangleElements = null)
+	{
+		this._adaptee = adaptee || new TriangleElements();
 	}
 }

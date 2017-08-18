@@ -1,5 +1,7 @@
 import { Single2DTexture, Sampler2D } from "@awayjs/graphics";
 
+import {MethodMaterial} from "@awayjs/materials";
+
 import {Texture2DBase} from "../textures/Texture2DBase";
 
 import {MaterialBase} from "./MaterialBase";
@@ -12,14 +14,12 @@ export class TextureMaterial extends MaterialBase
 	{
 		super();
 
-		this._sampler
 		this._sampler.smooth = smooth;
 		this._sampler.repeat = repeat;
 		this._sampler.mipmap = mipmap;
 
-		this._texture = texture;
-		this._adaptee.ambientMethod.texture = texture.adaptee;
-		this._adaptee.ambientMethod.texture.setSamplerAt(this._sampler, 0);
+		(<MethodMaterial> this._adaptee).ambientMethod.texture = texture.adaptee;
+		(<MethodMaterial> this._adaptee).ambientMethod.texture.setSamplerAt(this._sampler, 0);
 	}
 
 
@@ -29,11 +29,11 @@ export class TextureMaterial extends MaterialBase
 	 */
 	public get texture():Texture2DBase
 	{
-		return this._texture;
+		return <Texture2DBase> (<MethodMaterial> this._adaptee).ambientMethod.texture.adapter;
 	}
 
 	public set texture(value:Texture2DBase)
 	{
-		this._adaptee.ambientMethod.texture = value.adaptee;
+		(<MethodMaterial> this._adaptee).ambientMethod.texture = value.adaptee;
 	}
 }

@@ -9,18 +9,12 @@ import { IAsset } from "../library/assets/IAsset";
 
 export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsset
 {
-	private _ambientColor:number;
+	private _ambientColor:number = 0xFFFFFF;
+	private _ambientComponent:number[] = [0xFF, 0xFF, 0xFF, 0xFF];
 	private _color:number;
-
-	protected _adaptee:MethodMaterial;
+	private _colorComponent:number[];
 
 	protected _sampler:Sampler2D = new Sampler2D();
-
-
-	public get adaptee():MethodMaterial
-	{
-		return this._adaptee;
-	}
 
 	public get assetType():string
 	{
@@ -68,52 +62,56 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 
 	public get specular():number
 	{
-		return this._adaptee.specularMethod.strength;
+		return (<MethodMaterial> this._adaptee).specularMethod.strength;
 	}
 
 	public set specular(value:number)
 	{
-		this._adaptee.specularMethod.strength = value;
+		(<MethodMaterial> this._adaptee).specularMethod.strength = value;
 	}
 
 
 	public get gloss():number
 	{
-		return this._adaptee.specularMethod.gloss;
+		return (<MethodMaterial> this._adaptee).specularMethod.gloss;
 	}
 
 	public set gloss(value:number)
 	{
-		this._adaptee.specularMethod.gloss = value;
+		(<MethodMaterial> this._adaptee).specularMethod.gloss = value;
 	}
 
 
 	public get ambient():number
 	{
-		return this._adaptee.ambientMethod.strength;
+		return (<MethodMaterial> this._adaptee).ambientMethod.strength;
 	}
 
 	public set ambient(value:number)
 	{
-		this._adaptee.ambientMethod.strength = value;
+		(<MethodMaterial> this._adaptee).ambientMethod.strength = value;
 	}
 
 	constructor(image?:Image2D, alpha?:number);
 	constructor(color?:number, alpha?:number);
 	constructor(imageColor:any = null, alpha:number = 1)
 	{
-		super();
-		this._adaptee = new MethodMaterial(imageColor, alpha);
+		super(new MethodMaterial(imageColor, alpha));
+
+		if (!isNaN(imageColor)) {
+			this._color = imageColor;
+			this._colorComponent = ColorUtils.float32ColorToARGB(imageColor);
+		}
 	}
 
 	public get animateUVs():boolean
 	{
-		return this._adaptee.animateUVs;
+		return (<MethodMaterial> this._adaptee).animateUVs;
 	}
 
 	public set animateUVs(value:boolean)
 	{
-		this._adaptee.animateUVs = value;
+		(<MethodMaterial> this._adaptee).animateUVs = value;
 	}
 
 	public get ambientColor():number
@@ -124,6 +122,7 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	public set ambientColor(value:number)
 	{
 		this._ambientColor = value;
+		this._ambientComponent = ColorUtils.float32ColorToARGB(value);
 
 		this._updateColor();
 	}
@@ -136,6 +135,7 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	public set color(value:number)
 	{
 		this._color = value;
+		this._colorComponent = ColorUtils.float32ColorToARGB(value);
 
 		this._updateColor();
 	}
@@ -145,12 +145,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get diffuseMethod():DiffuseBasicMethod | DiffuseCompositeMethod
 	{
-		return this._adaptee.diffuseMethod;
+		return (<MethodMaterial> this._adaptee).diffuseMethod;
 	}
 
 	public set diffuseMethod(value:DiffuseBasicMethod | DiffuseCompositeMethod)
 	{
-		this._adaptee.diffuseMethod = value;
+		(<MethodMaterial> this._adaptee).diffuseMethod = value;
 	}
 
 	/**
@@ -158,12 +158,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get lightPicker():LightPickerBase
 	{
-		return this._adaptee.lightPicker;
+		return (<MethodMaterial> this._adaptee).lightPicker;
 	}
 
 	public set lightPicker(value:LightPickerBase)
 	{
-		this._adaptee.lightPicker = value;
+		(<MethodMaterial> this._adaptee).lightPicker = value;
 	}
 
 	/**
@@ -171,16 +171,16 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get alphaBlending():boolean
 	{
-		return this._adaptee.alphaBlending;
+		return (<MethodMaterial> this._adaptee).alphaBlending;
 	}
 
 	public set alphaBlending(value:boolean)
 	{
-		this._adaptee.alphaBlending = value;
+		(<MethodMaterial> this._adaptee).alphaBlending = value;
 	}
 
 	private _updateColor():void
 	{
-		this._adaptee.style.color = ColorUtils.ARGBtoFloat32(0xFF, this._ambientColor[1]*this._color[1]/0xFF, this._ambientColor[2]*this._color[2]/0xFF, this._ambientColor[3]*this._color[3]/0xFF);
+		(<MethodMaterial> this._adaptee).style.color = ColorUtils.ARGBtoFloat32(0xFF, this._ambientComponent[1]*this._colorComponent[1]/0xFF, this._ambientComponent[2]*this._colorComponent[2]/0xFF, this._ambientComponent[3]*this._colorComponent[3]/0xFF);
 	}
 }

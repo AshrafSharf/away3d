@@ -19,12 +19,10 @@ export class PrimitiveBase extends Geometry
 	 * @param yUp Defines whether the normal vector of the plane should point along the Y-axis (true) or Z-axis (false).
 	 * @param doubleSided Defines whether the plane will be visible from both sides, with correct vertex normals.
 	 */
-	constructor(width:number=100, height:number=100, segmentsW:number=1, segmentsH:number=1, yUp:boolean = true, doubleSided:boolean = false){
-		super();
-		this.isPrefab=true;
-	}
-	public getSprite():Sprite{
-		return (<Sprite>this._prefab.getNewObject());
-	}
+	constructor(prefab:PrimitivePrefabBase)
+	{
+		super((<Sprite>prefab.getNewObject()).graphics);
 
+		this._prefab = prefab;
+	}
 }

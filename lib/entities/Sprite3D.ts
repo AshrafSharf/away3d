@@ -1,30 +1,29 @@
 import {Vector3D} from "@awayjs/core"
 import {Billboard, AlignmentMode} from "@awayjs/scene";
+import {MaterialBase as AwayMaterialBase} from "@awayjs/graphics";
 import {Entity} from "./Entity";
 import {MaterialBase} from "../materials/MaterialBase";
 import {Object3D} from "../core/base/Object3D";
 
 export class Sprite3D extends Entity
 {
-	private _material:MaterialBase;
+	constructor(mat:MaterialBase, width:number, height:number)
+	{
+		super(new Billboard(<AwayMaterialBase> mat.adaptee));
 
-	constructor(mat:MaterialBase, width:number, height:number){
-		super(new Billboard(mat.adaptee));
-		this._material = mat;
 		(<Billboard> this._adaptee).alignmentMode = AlignmentMode.REGISTRATION_POINT;
 		(<Billboard> this._adaptee).width = width;
 		(<Billboard> this._adaptee).height = height;
 
 		(<Billboard> this._adaptee).registrationPoint = new Vector3D(width/2, height/2, 0)
 	}
+
 	public get material():MaterialBase
 	{
-		return this._material;
+		return <MaterialBase> ((<Billboard> this._adaptee).material? (<Billboard> this._adaptee).material.adapter : null);
 	}
 	public set material(value:MaterialBase)
 	{
-		this._material = value;
-
-		(<Billboard> this._adaptee).material = value.adaptee;
+		(<Billboard> this._adaptee).material = <AwayMaterialBase> (value? value.adaptee : null);
 	}
 }

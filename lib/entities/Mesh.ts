@@ -5,13 +5,14 @@ import { SubMesh } from "../core/base/SubMesh";
 import { Geometry } from "../core/base/Geometry";
 import { AssetType } from "../library/assets/AssetType";
 //import { GeometryEvent } from "../events/GeometryEvent";
-import { ISubGeometry } from "../core/base/ISubGeometry";
+import { SubGeometry } from "../core/base/SubGeometry";
 import { Object3D } from "../core/base/Object3D";
 
 import {MaterialBase} from "../materials/MaterialBase";
+import {AssetEvent} from "@awayjs/core";
 import {Sprite} from "@awayjs/scene";
 import { PrimitiveBase } from "../primitives/PrimitiveBase";
-import {IMaterial} from "@awayjs/graphics";
+import {MaterialBase as AwayMaterialBase, Graphics} from "@awayjs/graphics";
 
 /**
  * Mesh is an instance of a Geometry, augmenting it with a presence in the scene graph, a material, and an animation
@@ -21,8 +22,9 @@ import {IMaterial} from "@awayjs/graphics";
 export class Mesh extends Entity// implements IMaterialOwner, IAsset
 {
 	protected _geometry:Geometry;
-	private _material:MaterialBase;
-
+	private _subMeshes:SubMesh[];
+	private _onGraphicsInvalidateDelegate:(event:AssetEvent) => void;
+	private _subMeshesDirty:boolean;
 
 	/**
 	 * Create a new Mesh object.
@@ -30,27 +32,20 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 * @param geometry                    The geometry used by the mesh that provides it with its shape.
 	 * @param material    [optional]        The material with which to render the Mesh.
 	 */
-	constructor(geometry:Geometry, material:MaterialBase = null){
-		var adaptee:Sprite;
-		if(geometry){
-			if(geometry.isPrefab){
-				adaptee = (<PrimitiveBase>geometry).getSprite();
+	constructor(geometry:Geometry, material:MaterialBase = null, copyGeometry:boolean = true)
+	{
+		super(Sprite.getNewSprite(material? <AwayMaterialBase> material.adaptee : null));
 
-				if (material)
-					adaptee.material = <IMaterial> material.adaptee;
-			}
-			else{
-				//todo;
-			}
-		}
-		else{
-			adaptee = Sprite.getNewSprite(material? <IMaterial> material.adaptee : null);
-		}
+		this._geometry = geometry || new Geometry();
 
-		super(adaptee);
+		if (copyGeometry && geometry)
+			(<Graphics> geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
 
-		this._geometry = geometry;
-		this._material = material;
+		this._onGraphicsInvalidateDelegate = (event:AssetEvent) => this.onGraphicsInvalidate(event);
+
+		this._geometry.adaptee.addEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
+
+		this._subMeshesDirty = true;
 	}
 
 	public bakeTransformations():void
@@ -105,8 +100,14 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 
 	public set geometry(value:Geometry)
 	{
-		this._geometry=value;
-		//todo: set geometry.adaptee on this.adaptee
+		this._geometry.adaptee.removeEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
+		this._geometry = value;
+		this._geometry.adaptee.addEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
+
+		(<Graphics> this._geometry.adaptee).clear();
+		(<Graphics> this._geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
+
+		this._subMeshesDirty = true;
 	}
 
 	/**
@@ -114,14 +115,12 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	public get material():MaterialBase
 	{
-		return this._material;
+		return <MaterialBase> ((<Sprite> this._adaptee).material? (<Sprite> this._adaptee).material.adapter : null);
 	}
 
 	public set material(value:MaterialBase)
 	{
-		this._material = value;
-
-		(<Sprite> this._adaptee).material = value? value.adaptee : null;
+		(<Sprite> this._adaptee).material = <AwayMaterialBase> (value? value.adaptee : null);
 	}
 
 	/**
@@ -130,8 +129,10 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	public get subMeshes():SubMesh[]
 	{
-		//todo
-		return [];
+		if (this._subMeshesDirty)
+			this._updateSubMeshes();
+
+		return this._subMeshes;
 	}
 
 	/**
@@ -161,7 +162,7 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	public dispose():void
 	{
-		//todo
+		super.dispose();
 	}
 
 	/**
@@ -191,19 +192,37 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	public clone():Mesh
 	{
-		var clone:Mesh = new Mesh(this._geometry, this._material);
+		var clone:Mesh = new Mesh(this._geometry, <MaterialBase> ((<Sprite> this._adaptee).material? (<Sprite> this._adaptee).material.adapter : null), false);
 
-		(<Sprite> this._adaptee).copyTo(<Sprite> clone.adaptee);
+		(<Sprite> this._adaptee).copyTo(<Sprite> clone.adaptee, true);
 
 		return clone;
 	}
 
 
 
-	public getSubMeshForSubGeometry(subGeometry:ISubGeometry):SubMesh
+	public getSubMeshForSubGeometry(subGeometry:SubGeometry):SubMesh
 	{
 		//todo
 		return null;//this._subMeshes[this._geometry.subGeometries.indexOf(subGeometry)];
+	}
+
+	private _updateSubMeshes()
+	{
+		this._subMeshesDirty = false;
+		this._subMeshes = [];
+
+
+		var graphics:Graphics = (<Sprite> this._adaptee).graphics;
+		var len:number = graphics.count;
+		for (var i:number = 0; i < len; i++) {
+			this._subMeshes.push(new SubMesh(graphics.getShapeAt(i)));
+		}
+	}
+
+	private onGraphicsInvalidate(event:AssetEvent)
+	{
+		this._subMeshesDirty = true;
 	}
 
 }

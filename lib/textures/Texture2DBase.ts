@@ -1,6 +1,7 @@
+import { IAssetAdapter } from "@awayjs/core"
 import { TextureBase } from "@awayjs/graphics"
 
-export class Texture2DBase
+export class Texture2DBase implements IAssetAdapter
 {
 	protected _adaptee;
 
@@ -9,8 +10,15 @@ export class Texture2DBase
 		return this._adaptee;
 	}
 
-	constructor()
+	constructor(adaptee:TextureBase)
 	{
+		this._adaptee = adaptee;
+		this._adaptee.adapter = this;
+	}
 
+	public dispose()
+	{
+		this._adaptee.dispose();
+		this._adaptee = null;
 	}
 }

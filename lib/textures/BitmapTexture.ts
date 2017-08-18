@@ -9,9 +9,7 @@ export class BitmapTexture extends Texture2DBase
 
 	constructor(bitmapData:BitmapData, generateMipmaps:boolean = true)
 	{
-		super();
-
-		this._adaptee = new Single2DTexture(bitmapData.adaptee);
+		super(new Single2DTexture(bitmapData.adaptee));
 
 		this.bitmapData = this._bitmapData;
 	}
