@@ -11,7 +11,7 @@ export class BitmapTexture extends Texture2DBase
 	{
 		super(new Single2DTexture(bitmapData.adaptee));
 
-		this.bitmapData = this._bitmapData;
+		this._bitmapData = bitmapData;
 	}
 
 	public get bitmapData():BitmapData

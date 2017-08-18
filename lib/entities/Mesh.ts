@@ -34,13 +34,15 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	 */
 	constructor(geometry:Geometry, material:MaterialBase = null, copyGeometry:boolean = true)
 	{
-		super(Sprite.getNewSprite(material? <AwayMaterialBase> material.adaptee : null));
+		super(Sprite.getNewSprite());
 
 		this._geometry = geometry || new Geometry();
 
 		if (copyGeometry && geometry)
 			(<Graphics> geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
 
+		if (material)
+			(<Sprite> this._adaptee).material = <AwayMaterialBase> material.adaptee;
 		this._onGraphicsInvalidateDelegate = (event:AssetEvent) => this.onGraphicsInvalidate(event);
 
 		this._geometry.adaptee.addEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
