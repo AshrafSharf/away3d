@@ -3,13 +3,19 @@ import {PrimitivePlanePrefab, PrimitivePrefabBase} from "@awayjs/scene"
 import {Sprite} from "@awayjs/scene"
 export class PrimitiveBase extends Geometry
 {
+	protected _prefab:PrimitivePrefabBase;
+
+	public get prefab():PrimitivePrefabBase
+	{
+		return this._prefab;
+	}
+
 	public scaleUV(scaleU:number, scaleV:number)
 	{
 		this._prefab.scaleU = scaleU;
 		this._prefab.scaleV = scaleV;
 	}
 
-	protected _prefab:PrimitivePrefabBase;
 	/**
 	 * Creates a new Plane object.
 	 * @param width The width of the plane.

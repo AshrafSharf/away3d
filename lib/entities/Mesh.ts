@@ -38,8 +38,11 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 
 		this._geometry = geometry || new Geometry();
 
-		if (copyGeometry && geometry)
+		if (copyGeometry && geometry) {
 			(<Graphics> geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
+			if (geometry instanceof PrimitiveBase)
+				(<Sprite> this._adaptee)._iSourcePrefab = (<PrimitiveBase> geometry).prefab;
+		}
 
 		if (material)
 			(<Sprite> this._adaptee).material = <AwayMaterialBase> material.adaptee;
@@ -102,12 +105,17 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 
 	public set geometry(value:Geometry)
 	{
+		var material:AwayMaterialBase = <AwayMaterialBase> (<Sprite> this._adaptee).material;
+
 		this._geometry.adaptee.removeEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
 		this._geometry = value;
 		this._geometry.adaptee.addEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
 
 		(<Graphics> this._geometry.adaptee).clear();
 		(<Graphics> this._geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
+
+		//reset material
+		(<Sprite> this._adaptee).material = material;
 
 		this._subMeshesDirty = true;
 	}

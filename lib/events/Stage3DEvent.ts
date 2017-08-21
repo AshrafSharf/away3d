@@ -1,6 +1,24 @@
-export class Stage3DEvent {
+import {EventBase} from "@awayjs/core";
 
-	public static CONTEXT3D_CREATED:string = "contextcreated";
-	public static CONTEXT3D_RECREATED:string = "contextrecreated";
-	public static VIEWPORT_UPDATED:string = "viewportupdated";
+export class Stage3DEvent extends EventBase
+{
+	/**
+	 *
+	 */
+	public static CONTEXT3D_CREATED:string = "context3DCreated";
+
+	/**
+	 *
+	 */
+	public static CONTEXT3D_DISPOSED:string = "context3DDisposed";
+
+	/**
+	 *
+	 */
+	public static CONTEXT3D_RECREATED:string = "context3DRecreated";
+
+	/**
+	 *
+	 */
+	public static VIEWPORT_UPDATED:string = "viewportUpdated";
 }
