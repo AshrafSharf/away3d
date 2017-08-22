@@ -35,9 +35,10 @@ export class Away3DSceneGraphFactory extends DefaultSceneGraphFactory implements
 
 		if (imageColor instanceof ImageBase) {
 			var image:BitmapImage2D = <BitmapImage2D> imageColor;
-			material = <MethodMaterial> new TextureMaterial(new BitmapTexture(this.imageStore[image.id] || (this.imageStore[image.id] = this._getBitmapData(image)))).adaptee
+			material = <MethodMaterial> new TextureMaterial(new BitmapTexture(this.imageStore[image.id] || (this.imageStore[image.id] = this._getBitmapData(image)))).adaptee;
+			(<TextureMaterial>material.adapter).mipmap=false;
 		} else {
-			material = <MethodMaterial> new ColorMaterial(imageColor, alpha).adaptee
+			material = <MethodMaterial> new ColorMaterial(imageColor, alpha).adaptee;
 		}
 
 		return material;

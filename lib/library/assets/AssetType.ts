@@ -9,7 +9,7 @@ export class AssetType
 	public static SKELETON:string = "skeleton";
 	public static SKELETON_POSE:string = "skeletonPose";
 	public static CONTAINER:string = "container";
-	public static TEXTURE:string = "texture";;
+	public static TEXTURE:string = "texture";
 	public static TEXTURE_PROJECTOR:string = "textureProjector";
 	public static MATERIAL:string = "material";
 	public static ANIMATION_SET:string = "animationSet";
