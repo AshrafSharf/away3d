@@ -239,6 +239,7 @@ export class View3D extends Sprite
 	public set camera(camera:Camera3D)
 	{
 		this._camera = camera;
+		this._view.camera = <Camera>camera.adaptee;
 	}
 
 	/**
