@@ -3,9 +3,11 @@ import {PrimitiveBase} from "./PrimitiveBase"
 import {PrimitiveSpherePrefab} from "@awayjs/scene"
 export class SphereGeometry extends PrimitiveBase
 {
-	constructor(radius:number = 50, segmentsW:number = 16, segmentsH:number = 12, yUp:boolean = true)
+	constructor(prefab?:PrimitiveSpherePrefab);
+	constructor(radius?:number, segmentsW?:number, segmentsH?:number, yUp?:boolean);
+	constructor(prefabRadius:number | PrimitiveSpherePrefab = 50, segmentsW:number = 16, segmentsH:number = 12, yUp:boolean = true)
 	{
-		super(new PrimitiveSpherePrefab(null, "triangle", radius, segmentsW, segmentsH, yUp));
+		super((prefabRadius instanceof PrimitiveSpherePrefab)? prefabRadius : new PrimitiveSpherePrefab(null, "triangle", prefabRadius, segmentsW, segmentsH, yUp));
 	}
 
 }

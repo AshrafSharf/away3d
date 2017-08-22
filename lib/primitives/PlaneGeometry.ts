@@ -40,9 +40,11 @@ export class PlaneGeometry extends PrimitiveBase
 	 * @param yUp Defines whether the normal vector of the plane should point along the Y-axis (true) or Z-axis (false).
 	 * @param doubleSided Defines whether the plane will be visible from both sides, with correct vertex normals.
 	 */
-	constructor(width:number=100, height:number=100, segmentsW:number=1, segmentsH:number=1, yUp:boolean = true, doubleSided:boolean = false)
+	constructor(prefab?:PrimitivePlanePrefab);
+	constructor(width?:number, height?:number, segmentsW?:number, segmentsH?:number, yUp?:boolean, doubleSided?:boolean);
+	constructor(prefabWidth:number | PrimitivePlanePrefab =100, height:number=100, segmentsW:number=1, segmentsH:number=1, yUp:boolean = true, doubleSided:boolean = false)
 	{
-		super(new PrimitivePlanePrefab(null, "triangle", width, height, segmentsW, segmentsH, yUp, doubleSided));
+		super((prefabWidth instanceof PrimitivePlanePrefab)? prefabWidth : new PrimitivePlanePrefab(null, "triangle", prefabWidth, height, segmentsW, segmentsH, yUp, doubleSided));
 	}
 
 }

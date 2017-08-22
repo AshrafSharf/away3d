@@ -1,15 +1,22 @@
 import {IAssetAdapter, Point} from "@awayjs/core";
-import {BitmapImage2D, ImageBase} from "@awayjs/graphics";
-import {Timeline, Sprite, DisplayObjectContainer, Billboard, ISceneGraphFactory} from "@awayjs/scene";
+import {BitmapImage2D, ImageBase, ElementsType} from "@awayjs/graphics";
+import {Timeline, Sprite, DisplayObjectContainer, Billboard, ISceneGraphFactory, PrefabBase, PrimitiveCapsulePrefab, PrimitiveCubePrefab, PrimitiveCylinderPrefab, PrimitivePlanePrefab, PrimitiveSpherePrefab} from "@awayjs/scene";
 import {MethodMaterial} from "@awayjs/materials";
 import {DefaultSceneGraphFactory} from "@awayjs/parsers";
 
 import {BitmapData} from "@as3web/flash";
 
+import {Geometry} from "../core/base/Geometry";
 import {Mesh} from "../entities/Mesh";
 import {Sprite3D} from "../entities/Sprite3D";
 import {TextureMaterial} from "../materials/TextureMaterial";
 import {ColorMaterial} from "../materials/ColorMaterial";
+import {CapsuleGeometry} from "../primitives/CapsuleGeometry";
+import {CubeGeometry} from "../primitives/CubeGeometry";
+import {CylinderGeometry} from "../primitives/CylinderGeometry";
+import {PlaneGeometry} from "../primitives/PlaneGeometry";
+import {SphereGeometry} from "../primitives/SphereGeometry";
+import {WireframeSphere} from "../primitives/WireframeSphere";
 import {ObjectContainer3D} from "../containers/ObjectContainer3D";
 import {BitmapTexture} from "../textures/BitmapTexture";
 
@@ -17,8 +24,11 @@ export class Away3DSceneGraphFactory extends DefaultSceneGraphFactory implements
 {
 	public imageStore:Object = {};
 
-	public createSprite():Sprite
+	public createSprite(prefab:PrefabBase = null):Sprite
 	{
+		if (prefab)
+			return <Sprite> new Mesh(this._createGeometry(prefab)).adaptee;
+
 		return <Sprite> new Mesh(null).adaptee;
 	}
 
@@ -50,5 +60,21 @@ export class Away3DSceneGraphFactory extends DefaultSceneGraphFactory implements
 		(<BitmapImage2D> bitmapData.adaptee).copyPixels(image, image.rect, new Point());
 
 		return bitmapData;
+	}
+
+	private _createGeometry(prefab:PrefabBase):Geometry
+	{
+		if (prefab instanceof PrimitiveCapsulePrefab)
+			return new CapsuleGeometry(prefab);
+		else if (prefab instanceof PrimitiveCubePrefab)
+			return new CubeGeometry(prefab);
+		else if (prefab instanceof PrimitiveCylinderPrefab)
+			return new CylinderGeometry(prefab);
+		else if (prefab instanceof PrimitivePlanePrefab)
+			return new PlaneGeometry(prefab);
+		else if (prefab instanceof PrimitiveSpherePrefab && prefab.elementsType == ElementsType.TRIANGLE)
+			return new SphereGeometry(prefab);
+		else if (prefab instanceof PrimitiveSpherePrefab)
+			return new WireframeSphere(prefab);
 	}
 }
