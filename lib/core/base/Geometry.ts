@@ -1,5 +1,5 @@
 import {AssetEvent} from "@awayjs/core";
-import {Graphics, TriangleElements} from "@awayjs/graphics";
+import {Graphics, TriangleElements, Shape} from "@awayjs/graphics";
 import {SubGeometry} from "./SubGeometry";
 
 import { AssetType } from "../../library/assets/AssetType";
@@ -25,7 +25,10 @@ export class Geometry extends NamedAssetBase
 
 	public addSubGeometry(tSub:SubGeometry)
 	{
-
+		var newShape:Shape=new Shape(tSub.adaptee);
+		var graphics:Graphics = (<Graphics> this._adaptee);
+		graphics.addShape(newShape);
+		this._subGeometriesDirty = true;
 	}
 
 	constructor(adaptee:Graphics = null)

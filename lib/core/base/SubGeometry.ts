@@ -14,10 +14,11 @@ export class SubGeometry
 		return [];
 	}
 	public updateVertexData(verts:any){
-
+		this.adaptee.setPositions(verts);
 	}
 	public updateIndexData(idx:any){
 
+		this.adaptee.setIndices(idx);
 	}
 	public updateUVData(verts:any){
 
