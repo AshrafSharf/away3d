@@ -25,6 +25,7 @@ export class View3D extends Sprite
 	private _localTLPos:Point;
 	private _localBRPos:Point;
 	private _globalPos:Point;
+	private _hitField:Sprite;
 
 	public get view():View
 	{
@@ -45,6 +46,8 @@ export class View3D extends Sprite
 		//this.adaptee.visible=false;
 		//this.adaptee.mouseEnabled=false;
 		this._scene = scene || new Scene3D();
+
+		this._initHitField();
 /*
 		this._view = new View(this._renderer);
 		//this._camera = new Camera3D();
@@ -270,13 +273,13 @@ export class View3D extends Sprite
 	 */
 	public get width():number
 	{
-		return this.adaptee.width;
+		return this._hitField.width;
 	}
 
 	public set width(value:number)
 	{
 
-		this.adaptee.width=value;
+		this._hitField.width=value;
 		this._localBRPos.x = value + this._localTLPos.x;
 		this._view.width= this.adaptee.parent.localToGlobal(this._localBRPos).x - this._globalPos.x;
 
@@ -288,12 +291,12 @@ export class View3D extends Sprite
 	 */
 	public get height():number
 	{
-		return this.adaptee.height;
+		return this._hitField.height;
 	}
 
 	public set height(value:number)
 	{
-		this.adaptee.height=value;
+		this._hitField.height=value;
 		this._localBRPos.y = value + this._localTLPos.y;
 		this._view.height=this.adaptee.parent.localToGlobal(this._localBRPos).y - this._globalPos.y;
 
@@ -456,5 +459,15 @@ export class View3D extends Sprite
 	public set transform(value:Transform){}
 	public set scaleX(value:number){}
 	public set scaleY(value:number){}
+
+	private _initHitField():void
+	{
+		this._hitField = new Sprite();
+		this._hitField.alpha = 0;
+		this._hitField.doubleClickEnabled = true;
+		this._hitField.graphics.beginFill(0x000000);
+		this._hitField.graphics.drawRect(0, 0, 100, 100);
+		this.addChild(this._hitField);
+	}
 }
 
