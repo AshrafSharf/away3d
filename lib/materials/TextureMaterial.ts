@@ -14,12 +14,11 @@ export class TextureMaterial extends MaterialBase
 	{
 		super();
 
-		this._sampler.smooth = smooth;
-		this._sampler.repeat = repeat;
-		this._sampler.mipmap = mipmap;
+		this.smooth = smooth;
+		this.repeat = repeat;
+		this.mipmap = mipmap;
 
 		(<MethodMaterial> this._adaptee).ambientMethod.texture = texture.adaptee;
-		(<MethodMaterial> this._adaptee).ambientMethod.texture.setSamplerAt(this._sampler, 0);
 	}
 
 

@@ -14,8 +14,6 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	private _color:number;
 	private _colorComponent:number[];
 
-	protected _sampler:Sampler2D = new Sampler2D();
-
 	public get assetType():string
 	{
 		return AssetType.MATERIAL;
@@ -26,12 +24,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get repeat():boolean
 	{
-		return this._sampler.repeat;
+		return (<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).repeat;
 	}
 
 	public set repeat(value:boolean)
 	{
-		this._sampler.repeat = value;
+		(<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).repeat = value;
 	}
 
 	/**
@@ -39,12 +37,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get mipmap():boolean
 	{
-		return this._sampler.mipmap;
+		return (<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).mipmap;
 	}
 
 	public set mipmap(value:boolean)
 	{
-		this._sampler.mipmap = value;
+		(<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).mipmap = value;
 	}
 
 	/**
@@ -52,12 +50,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get smooth():boolean
 	{
-		return this._sampler.smooth;
+		return (<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).smooth;
 	}
 
 	public set smooth(value:boolean)
 	{
-		this._sampler.smooth = value;
+		(<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).smooth = value;
 	}
 
 	public get specular():number
@@ -97,6 +95,8 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	constructor(imageColor:any = null, alpha:number = 1)
 	{
 		super(new MethodMaterial(imageColor, alpha));
+
+		(<MethodMaterial> this._adaptee).style.sampler = new Sampler2D();
 
 		if (!isNaN(imageColor)) {
 			this._color = imageColor;
