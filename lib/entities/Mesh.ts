@@ -111,8 +111,10 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 		this._geometry = value;
 		this._geometry.adaptee.addEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
 
-		(<Graphics> this._geometry.adaptee).clear();
+		(<Sprite> this._adaptee).graphics.clear();
 		(<Graphics> this._geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
+		if (this._geometry instanceof PrimitiveBase)
+			(<Sprite> this._adaptee)._iSourcePrefab = (<PrimitiveBase> this._geometry).prefab;
 
 		//reset material
 		(<Sprite> this._adaptee).material = material;
