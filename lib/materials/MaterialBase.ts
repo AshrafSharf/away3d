@@ -101,6 +101,7 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 		if (!isNaN(imageColor)) {
 			this._color = imageColor;
 			this._colorComponent = ColorUtils.float32ColorToARGB(imageColor);
+			this._updateColor();
 		}
 	}
 

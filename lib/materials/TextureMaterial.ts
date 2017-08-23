@@ -12,13 +12,11 @@ export class TextureMaterial extends MaterialBase
 
 	constructor(texture:Texture2DBase, smooth:boolean = true, repeat:boolean = false, mipmap:boolean = true)
 	{
-		super();
+		super((<Single2DTexture> texture.adaptee).image2D);
 
 		this.smooth = smooth;
 		this.repeat = repeat;
 		this.mipmap = mipmap;
-
-		(<MethodMaterial> this._adaptee).ambientMethod.texture = texture.adaptee;
 	}
 
 
