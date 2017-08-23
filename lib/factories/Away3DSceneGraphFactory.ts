@@ -55,7 +55,7 @@ export class Away3DSceneGraphFactory extends DefaultSceneGraphFactory implements
 
 	private _getBitmapData(image:BitmapImage2D):BitmapData
 	{
-		var bitmapData:BitmapData = new BitmapData(image.width, image.height, image.transparent);
+		var bitmapData:BitmapData = new BitmapData(image.width, image.height, image.transparent, 0x0);
 
 		(<BitmapImage2D> bitmapData.adaptee).copyPixels(image, image.rect, new Point());
 
