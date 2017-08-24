@@ -1,8 +1,9 @@
 import {IAssetAdapter, Point} from "@awayjs/core";
-import {BitmapImage2D, ImageBase, ElementsType} from "@awayjs/graphics";
+import {BitmapImage2D, ImageBase, ElementsType, Image2D} from "@awayjs/graphics";
 import {Timeline, Sprite, DisplayObjectContainer, Billboard, ISceneGraphFactory, PrefabBase, PrimitiveCapsulePrefab, PrimitiveCubePrefab, PrimitiveCylinderPrefab, PrimitivePlanePrefab, PrimitiveSpherePrefab} from "@awayjs/scene";
 import {MethodMaterial} from "@awayjs/materials";
 import {DefaultSceneGraphFactory} from "@awayjs/parsers";
+import {ViewImage2D} from "@awayjs/view";
 
 import {BitmapData} from "@as3web/flash";
 
@@ -41,25 +42,15 @@ export class Away3DSceneGraphFactory extends DefaultSceneGraphFactory implements
 	public createMaterial(color?:number, alpha?:number):MethodMaterial;
 	public createMaterial(imageColor?:any, alpha?:number):MethodMaterial
 	{
-		var material:MethodMaterial;
+		if (imageColor instanceof ImageBase)
+			return <MethodMaterial> new TextureMaterial(new BitmapTexture(<BitmapData> (<BitmapImage2D> imageColor).adapter)).adaptee;
 
-		if (imageColor instanceof ImageBase) {
-			var image:BitmapImage2D = <BitmapImage2D> imageColor;
-			material = <MethodMaterial> new TextureMaterial(new BitmapTexture(this.imageStore[image.id] || (this.imageStore[image.id] = this._getBitmapData(image)))).adaptee;
-		} else {
-			material = <MethodMaterial> new ColorMaterial(imageColor, alpha).adaptee;
-		}
-
-		return material;
+		return <MethodMaterial> new ColorMaterial(imageColor, alpha).adaptee;
 	}
 
-	private _getBitmapData(image:BitmapImage2D):BitmapData
+	public createImage2D(width:number, height:number, transparent:boolean = true, fillColor:number = null, powerOfTwo:boolean = true):Image2D
 	{
-		var bitmapData:BitmapData = new BitmapData(image.width, image.height, image.transparent, 0x0);
-
-		(<BitmapImage2D> bitmapData.adaptee).copyPixels(image, image.rect, new Point());
-
-		return bitmapData;
+		return <ViewImage2D> new BitmapData(width, height, transparent, fillColor).adaptee;
 	}
 
 	private _createGeometry(prefab:PrefabBase):Geometry
