@@ -8,7 +8,7 @@ import {NamedAssetBase} from "../../library/assets/NamedAssetBase";
 export class Geometry extends NamedAssetBase
 {
 	private _subGeometries:SubGeometry[];
-	private _subGeometriesDirty:boolean;
+	private _subGeometriesDirty:boolean = true;
 
 	public get assetType():string
 	{
@@ -36,8 +36,6 @@ export class Geometry extends NamedAssetBase
 		super(adaptee || new Graphics());
 
 		(<Graphics> this._adaptee).addEventListener(AssetEvent.INVALIDATE, (event:AssetEvent) => this.onGraphicsInvalidate(event));
-
-		this._subGeometries = [];
 	}
 
 	public scaleUV(scaleU:number = 1, scaleV:number = 1):void

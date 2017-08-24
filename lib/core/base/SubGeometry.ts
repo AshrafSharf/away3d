@@ -1,3 +1,4 @@
+import {AttributesBuffer} from "@awayjs/core";
 import {TriangleElements} from "@awayjs/graphics";
 
 export class SubGeometry
@@ -14,11 +15,11 @@ export class SubGeometry
 		return [];
 	}
 	public updateVertexData(verts:any){
-		this.adaptee.setPositions(verts);
+		this._adaptee.setPositions(verts);
 	}
 	public updateIndexData(idx:any){
 
-		this.adaptee.setIndices(idx);
+		this._adaptee.setIndices(idx);
 	}
 	public updateUVData(verts:any){
 
@@ -32,6 +33,6 @@ export class SubGeometry
 
 	constructor(adaptee:TriangleElements = null)
 	{
-		this._adaptee = adaptee || new TriangleElements();
+		this._adaptee = adaptee || new TriangleElements(new AttributesBuffer());
 	}
 }
