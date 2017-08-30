@@ -1,5 +1,6 @@
 import {Single2DTexture} from "@awayjs/graphics";
 import {BitmapData} from "@as3web/flash";
+import {ViewImage2D} from "@awayjs/view";
 
 import {Texture2DBase} from "./Texture2DBase";
 
@@ -24,6 +25,7 @@ export class BitmapTexture extends Texture2DBase
 		if (this._bitmapData == value)
 			return;
 
+		(<Single2DTexture>this.adaptee).image2D=(<ViewImage2D>value.adaptee);
 		this._bitmapData = value;
 	}
 }

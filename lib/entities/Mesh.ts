@@ -107,14 +107,18 @@ export class Mesh extends Entity// implements IMaterialOwner, IAsset
 	{
 		var material:AwayMaterialBase = <AwayMaterialBase> (<Sprite> this._adaptee).material;
 
-		this._geometry.adaptee.removeEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
+		if(this._geometry && this._geometry!=undefined)
+			this._geometry.adaptee.removeEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
 		this._geometry = value;
-		this._geometry.adaptee.addEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
+		if(this._geometry && this._geometry!=undefined)
+			this._geometry.adaptee.addEventListener(AssetEvent.INVALIDATE, this._onGraphicsInvalidateDelegate);
 
 		(<Sprite> this._adaptee).graphics.clear();
-		(<Graphics> this._geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
-		if (this._geometry instanceof PrimitiveBase)
-			(<Sprite> this._adaptee)._iSourcePrefab = (<PrimitiveBase> this._geometry).prefab;
+		if(this._geometry && this._geometry!=undefined){
+			(<Graphics> this._geometry.adaptee).copyTo((<Sprite> this._adaptee).graphics, true);
+			if (this._geometry instanceof PrimitiveBase)
+				(<Sprite> this._adaptee)._iSourcePrefab = (<PrimitiveBase> this._geometry).prefab;
+		}
 
 		//reset material
 		(<Sprite> this._adaptee).material = material;
