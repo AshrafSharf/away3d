@@ -25,7 +25,8 @@ export class BitmapTexture extends Texture2DBase
 		if (this._bitmapData == value)
 			return;
 
-		(<Single2DTexture>this.adaptee).image2D=(<ViewImage2D>value.adaptee);
 		this._bitmapData = value;
+
+		(<Single2DTexture>this.adaptee).image2D = <ViewImage2D> value.adaptee;
 	}
 }

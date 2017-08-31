@@ -1,5 +1,5 @@
 import {IAssetAdapter, ColorUtils} from "@awayjs/core";
-import {Sampler2D, Image2D} from "@awayjs/graphics";
+import {Sampler2D, Image2D, Single2DTexture} from "@awayjs/graphics";
 import { LightPickerBase } from "@awayjs/scene";
 import {MethodMaterial, DiffuseBasicMethod, DiffuseCompositeMethod} from "@awayjs/materials";
 
@@ -90,19 +90,16 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 		(<MethodMaterial> this._adaptee).ambientMethod.strength = value;
 	}
 
-	constructor(image?:Image2D, alpha?:number);
-	constructor(color?:number, alpha?:number);
-	constructor(imageColor:any = null, alpha:number = 1)
+	constructor(color:number = 0xFFFFFF, alpha:number = 1)
 	{
-		super(new MethodMaterial(imageColor, alpha));
+		super(new MethodMaterial(null, alpha));
 
 		(<MethodMaterial> this._adaptee).style.sampler = new Sampler2D();
 
-		if (!isNaN(imageColor)) {
-			this._color = imageColor;
-			this._colorComponent = ColorUtils.float32ColorToARGB(imageColor);
-			this._updateColor();
-		}
+		this._color = color;
+		this._colorComponent = ColorUtils.float32ColorToARGB(color);
+
+		this._updateColor();
 	}
 
 	public get animateUVs():boolean
