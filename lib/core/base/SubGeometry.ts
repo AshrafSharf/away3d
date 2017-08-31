@@ -21,14 +21,17 @@ export class SubGeometry
 
 		this._adaptee.setIndices(idx);
 	}
-	public updateUVData(verts:any){
+	public updateUVData(uvs:any){
 
+		this._adaptee.setUVs(uvs);
 	}
-	public updateVertexNormalData(verts:any){
+	public updateVertexNormalData(value:any){
 
+		//this._adaptee.setNormals(value);
 	}
-	public updateVertexTangentData(verts:any){
-		
+	public updateVertexTangentData(value:any){
+
+		//this._adaptee.setTangents(value);
 	}
 
 	constructor(adaptee:TriangleElements = null)
