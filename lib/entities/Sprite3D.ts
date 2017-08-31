@@ -1,5 +1,5 @@
 import {Vector3D} from "@awayjs/core"
-import {Billboard, AlignmentMode} from "@awayjs/scene";
+import {Billboard, AlignmentMode, OrientationMode} from "@awayjs/scene";
 import {MaterialBase as AwayMaterialBase} from "@awayjs/graphics";
 import {Entity} from "./Entity";
 import {MaterialBase} from "../materials/MaterialBase";
@@ -11,6 +11,7 @@ export class Sprite3D extends Entity
 	{
 		super(new Billboard(<AwayMaterialBase> mat.adaptee));
 
+		(<Billboard> this._adaptee).orientationMode = OrientationMode.CAMERA_PLANE;
 		(<Billboard> this._adaptee).alignmentMode = AlignmentMode.REGISTRATION_POINT;
 		(<Billboard> this._adaptee).width = width;
 		(<Billboard> this._adaptee).height = height;

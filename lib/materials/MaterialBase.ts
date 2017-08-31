@@ -138,6 +138,17 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 		this._updateColor();
 	}
 
+
+	public get bothSides():boolean
+	{
+		return (<MethodMaterial> this._adaptee).bothSides;
+	}
+
+	public set bothSides(value:boolean)
+	{
+		(<MethodMaterial> this._adaptee).bothSides = value;
+	}
+
 	/**
 	 *
 	 */
