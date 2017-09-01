@@ -16,6 +16,9 @@ export class PrimitiveBase extends Geometry
 		this._prefab.scaleV = scaleV;
 	}
 
+	public validate():void
+	{
+	}
 	/**
 	 * Creates a new Plane object.
 	 * @param width The width of the plane.
