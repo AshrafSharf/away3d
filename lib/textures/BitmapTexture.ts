@@ -1,4 +1,4 @@
-import {Single2DTexture} from "@awayjs/graphics";
+import {ImageTexture2D} from "@awayjs/materials";
 import {BitmapData, IBitmapDataOwner} from "@as3web/flash";
 import {ViewImage2D} from "@awayjs/view";
 
@@ -10,7 +10,7 @@ export class BitmapTexture extends Texture2DBase implements IBitmapDataOwner
 
 	constructor(bitmapData:BitmapData, generateMipmaps:boolean = true)
 	{
-		super(new Single2DTexture(bitmapData.adaptee));
+		super(new ImageTexture2D(bitmapData.adaptee));
 
 		this._bitmapData = bitmapData;
 
@@ -36,6 +36,6 @@ export class BitmapTexture extends Texture2DBase implements IBitmapDataOwner
 		if (this._bitmapData)
 			this._bitmapData._addOwner(this);
 
-		(<Single2DTexture>this.adaptee).image2D = <ViewImage2D> value.adaptee;
+		(<ImageTexture2D>this.adaptee).image = <ViewImage2D> value.adaptee;
 	}
 }

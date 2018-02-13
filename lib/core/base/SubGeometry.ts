@@ -1,4 +1,4 @@
-import {AttributesBuffer} from "@awayjs/core";
+import {AttributesBuffer} from "@awayjs/stage";
 import {TriangleElements} from "@awayjs/graphics";
 
 export class SubGeometry

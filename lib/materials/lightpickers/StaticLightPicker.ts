@@ -1,1 +1,1 @@
-export {StaticLightPicker} from "@awayjs/scene";
+export {StaticLightPicker} from "@awayjs/materials";

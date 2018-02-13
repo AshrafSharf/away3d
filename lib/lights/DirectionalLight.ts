@@ -1,1 +1,1 @@
-export {DirectionalLight} from "@awayjs/scene"
+export {DirectionalLight} from "@awayjs/materials"

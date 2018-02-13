@@ -1,1 +1,1 @@
-export {PointLight} from "@awayjs/scene"
+export {PointLight} from "@awayjs/materials"

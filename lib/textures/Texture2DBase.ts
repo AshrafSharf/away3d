@@ -1,5 +1,5 @@
 import { IAssetAdapter } from "@awayjs/core"
-import { TextureBase } from "@awayjs/graphics"
+import { TextureBase } from "@awayjs/materials"
 
 export class Texture2DBase implements IAssetAdapter
 {

@@ -1,7 +1,6 @@
 import {IAssetAdapter, ColorUtils} from "@awayjs/core";
-import {Sampler2D, Image2D, Single2DTexture} from "@awayjs/graphics";
-import { LightPickerBase } from "@awayjs/scene";
-import {MethodMaterial, DiffuseBasicMethod, DiffuseCompositeMethod} from "@awayjs/materials";
+import {ImageSampler, Image2D} from "@awayjs/stage";
+import {LightPickerBase, MethodMaterial, DiffuseBasicMethod, DiffuseCompositeMethod} from "@awayjs/materials";
 
 import { AssetType } from "../library/assets/AssetType";
 import { NamedAssetBase } from "../library/assets/NamedAssetBase";
@@ -24,12 +23,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get repeat():boolean
 	{
-		return (<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).repeat;
+		return (<ImageSampler> (<MethodMaterial> this._adaptee).style.sampler).repeat;
 	}
 
 	public set repeat(value:boolean)
 	{
-		(<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).repeat = value;
+		(<ImageSampler> (<MethodMaterial> this._adaptee).style.sampler).repeat = value;
 	}
 
 	/**
@@ -37,12 +36,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get mipmap():boolean
 	{
-		return (<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).mipmap;
+		return (<ImageSampler> (<MethodMaterial> this._adaptee).style.sampler).mipmap;
 	}
 
 	public set mipmap(value:boolean)
 	{
-		(<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).mipmap = value;
+		(<ImageSampler> (<MethodMaterial> this._adaptee).style.sampler).mipmap = value;
 	}
 
 	/**
@@ -50,12 +49,12 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	 */
 	public get smooth():boolean
 	{
-		return (<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).smooth;
+		return (<ImageSampler> (<MethodMaterial> this._adaptee).style.sampler).smooth;
 	}
 
 	public set smooth(value:boolean)
 	{
-		(<Sampler2D> (<MethodMaterial> this._adaptee).style.sampler).smooth = value;
+		(<ImageSampler> (<MethodMaterial> this._adaptee).style.sampler).smooth = value;
 	}
 
 	public get specular():number
@@ -94,7 +93,7 @@ export class MaterialBase extends NamedAssetBase implements IAssetAdapter, IAsse
 	{
 		super(new MethodMaterial(null, alpha));
 
-		(<MethodMaterial> this._adaptee).style.sampler = new Sampler2D();
+		(<MethodMaterial> this._adaptee).style.sampler = new ImageSampler();
 
 		this._color = color;
 		this._colorComponent = ColorUtils.float32ColorToARGB(color);

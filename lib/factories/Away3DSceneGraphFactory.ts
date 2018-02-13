@@ -1,5 +1,6 @@
 import {IAssetAdapter, Point} from "@awayjs/core";
-import {BitmapImage2D, ImageBase, ElementsType, Image2D} from "@awayjs/graphics";
+import {BitmapImage2D, ImageBase, Image2D} from "@awayjs/stage";
+import {ElementsType} from "@awayjs/graphics";
 import {Timeline, Sprite, DisplayObjectContainer, Billboard, ISceneGraphFactory, PrefabBase, PrimitiveCapsulePrefab, PrimitiveCubePrefab, PrimitiveCylinderPrefab, PrimitivePlanePrefab, PrimitiveSpherePrefab} from "@awayjs/scene";
 import {MethodMaterial} from "@awayjs/materials";
 import {DefaultSceneGraphFactory} from "@awayjs/parsers";

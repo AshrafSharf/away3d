@@ -1,6 +1,6 @@
 import {Vector3D} from "@awayjs/core"
 import {Billboard, AlignmentMode, OrientationMode} from "@awayjs/scene";
-import {MaterialBase as AwayMaterialBase} from "@awayjs/graphics";
+import {MaterialBase as AwayMaterialBase} from "@awayjs/materials";
 import {Entity} from "./Entity";
 import {MaterialBase} from "../materials/MaterialBase";
 import {Object3D} from "../core/base/Object3D";

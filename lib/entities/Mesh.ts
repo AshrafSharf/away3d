@@ -12,7 +12,8 @@ import {MaterialBase} from "../materials/MaterialBase";
 import {AssetEvent} from "@awayjs/core";
 import {Sprite} from "@awayjs/scene";
 import { PrimitiveBase } from "../primitives/PrimitiveBase";
-import {MaterialBase as AwayMaterialBase, Graphics} from "@awayjs/graphics";
+import {Graphics} from "@awayjs/graphics";
+import {MaterialBase as AwayMaterialBase} from "@awayjs/materials";
 
 /**
  * Mesh is an instance of a Geometry, augmenting it with a presence in the scene graph, a material, and an animation

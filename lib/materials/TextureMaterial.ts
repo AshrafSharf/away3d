@@ -1,5 +1,3 @@
-import { Single2DTexture, Sampler2D } from "@awayjs/graphics";
-
 import {MethodMaterial} from "@awayjs/materials";
 
 import {Texture2DBase} from "../textures/Texture2DBase";
