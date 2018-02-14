@@ -31,6 +31,6 @@ export class TextureMaterial extends MaterialBase
 
 	public set texture(value:Texture2DBase)
 	{
-		(<MethodMaterial> this._adaptee).ambientMethod.texture = value.adaptee;
+		(<MethodMaterial> this._adaptee).ambientMethod.texture = value?value.adaptee:null;
 	}
 }
