@@ -25,6 +25,7 @@ export {AssetLoaderContext} from "./lib/loaders/misc/AssetLoaderContext";
 export { AWDParser} from './lib/loaders/parsers/AWDParser';
 export { Parsers} from './lib/loaders/parsers/Parsers';
 export { Loader3D} from './lib/loaders/Loader3D';
+export { LightBase} from './lib/lights/LightBase';
 export { PointLight} from './lib/lights/PointLight';
 export { DirectionalLight} from './lib/lights/DirectionalLight';
 export { BitmapDataAsset} from './lib/library/assets/BitmapDataAsset';
