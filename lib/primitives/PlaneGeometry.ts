@@ -31,6 +31,20 @@ export class PlaneGeometry extends PrimitiveBase
 		(<PrimitivePlanePrefab> this._prefab).width = value;
 	}
 
+
+	/**
+	 *
+	 */
+	public get doubleSided():boolean
+	{
+		return (<PrimitivePlanePrefab> this._prefab).doubleSided;
+	}
+
+	public set doubleSided(value:boolean)
+	{
+		(<PrimitivePlanePrefab> this._prefab).doubleSided = value;
+	}
+
 	/**
 	 * Creates a new Plane object.
 	 * @param width The width of the plane.
