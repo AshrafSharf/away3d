@@ -1,5 +1,1 @@
-export class Parsers {
-	public static enableAllBundled(){
-		
-	}
-}
+export {Parsers} from "@awayjs/parsers";
