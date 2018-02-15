@@ -33,4 +33,17 @@ export class TextureMaterial extends MaterialBase
 	{
 		(<MethodMaterial> this._adaptee).ambientMethod.texture = value?value.adaptee:null;
 	}
+
+	/**
+	 *
+	 */
+	public get blendMode():string
+	{
+		return (<MethodMaterial> this._adaptee).blendMode;
+	}
+
+	public set blendMode(value:string)
+	{
+		(<MethodMaterial> this._adaptee).blendMode = value;
+	}
 }
