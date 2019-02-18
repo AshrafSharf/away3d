@@ -1,10 +1,10 @@
 import {IAssetAdapter, Point} from "@awayjs/core";
 import {BitmapImage2D, ImageBase, Image2D} from "@awayjs/stage";
 import {ElementsType} from "@awayjs/graphics";
-import {Timeline, Sprite, DisplayObjectContainer, Billboard, ISceneGraphFactory, PrefabBase, PrimitiveCapsulePrefab, PrimitiveCubePrefab, PrimitiveCylinderPrefab, PrimitivePlanePrefab, PrimitiveSpherePrefab} from "@awayjs/scene";
+import {Timeline, Sprite, DisplayObjectContainer, Billboard, ISceneGraphFactory, PrefabBase, PrimitiveCapsulePrefab, PrimitiveCubePrefab, PrimitiveCylinderPrefab, PrimitivePlanePrefab, PrimitiveSpherePrefab, SceneImage2D} from "@awayjs/scene";
 import {MethodMaterial} from "@awayjs/materials";
-import {DefaultSceneGraphFactory} from "@awayjs/parsers";
-import {ViewImage2D} from "@awayjs/view";
+import {DefaultSceneGraphFactory} from "@awayjs/scene";
+
 
 import {BitmapData} from "@as3web/flash";
 
@@ -51,7 +51,7 @@ export class Away3DSceneGraphFactory extends DefaultSceneGraphFactory implements
 
 	public createImage2D(width:number, height:number, transparent:boolean = true, fillColor:number = null, powerOfTwo:boolean = true):Image2D
 	{
-		return <ViewImage2D> new BitmapData(width, height, transparent, fillColor).adaptee;
+		return <SceneImage2D> new BitmapData(width, height, transparent, fillColor).adaptee;
 	}
 
 	private _createGeometry(prefab:PrefabBase):Geometry

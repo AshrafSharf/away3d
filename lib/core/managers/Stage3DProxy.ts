@@ -141,12 +141,14 @@ export class Stage3DProxy extends EventDispatcher
 
 	public get scissorRect():Rectangle
 	{
-		return this._stage3D.scissorRect;
+		// todo2019: what happened to scissorRect ?
+		return null;//this._stage3D.scissorRect;
 	}
 
 	public set scissorRect(value:Rectangle)
 	{
-		this._stage3D.scissorRect = value;
+		// todo2019: what happened to scissorRect ?
+		//this._stage3D.scissorRect = value;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 import {Camera, Scene} from "@awayjs/scene";
-import { Sprite, Point, Rectangle, Vector3D, Transform } from "@as3web/flash"
-import { View } from "@awayjs/view";
+import { Sprite, Point, Rectangle, Vector3D, Transform, DisplayObjectContainer } from "@as3web/flash"
+import { View, BasicPartition } from "@awayjs/view";
 import { DefaultRenderer } from "@awayjs/renderer";
 
 import { Stage3DProxy } from "../core/managers/Stage3DProxy";
@@ -45,7 +45,6 @@ export class View3D extends Sprite
 		this._profile=profile;
 		//this.adaptee.visible=false;
 		//this.adaptee.mouseEnabled=false;
-		this._scene = scene || new Scene3D();
 
 		this._initHitField();
 /*
@@ -91,13 +90,13 @@ export class View3D extends Sprite
 		this._stage3DProxy=stage3DProxy;
 		
 		//create the view
-		this._renderer = new DefaultRenderer(stage3DProxy.stage3D);
+		this._renderer = new DefaultRenderer(new BasicPartition(new DisplayObjectContainer().adaptee), new View(null, stage3DProxy.stage3D));
 		this._renderer.renderableSorter = null;
 
-		this._view = new View(this._renderer);
+		this._scene = new Scene3D(this._renderer);
 		this._camera = new Camera3D();
-		this._view.camera = <Camera> this._camera.adaptee;
-		this._view.scene = <Scene> this._scene.adaptee;
+		(<Scene><any>this._scene.adaptee).camera = <Camera> this._camera.adaptee;
+		//this._view.scene = <Scene> this._scene.adaptee;
 		
 	}
 
@@ -140,22 +139,22 @@ export class View3D extends Sprite
 	 */
 	public get layeredView():boolean
 	{
-		return this._view.layeredView;
+		return (<Scene><any>this._scene.adaptee).layeredView;
 	}
 
 	public set layeredView(value:boolean)
 	{
-		this._view.layeredView=value;
+		(<Scene><any>this._scene.adaptee).layeredView=value;
 	}
 
 	public get disableMouseEvents():boolean
 	{
-		return this._view.disableMouseEvents;
+		return (<Scene><any>this._scene.adaptee).disableMouseEvents;
 	}
 
 	public set disableMouseEvents(value:boolean)
 	{
-		this._view.disableMouseEvents = value;
+		(<Scene><any>this._scene.adaptee).disableMouseEvents = value;
 	}
 
 		/**
@@ -239,7 +238,7 @@ export class View3D extends Sprite
 	public set camera(camera:Camera3D)
 	{
 		this._camera = camera;
-		this._view.camera = <Camera>camera.adaptee;
+		(<Scene><any>this._scene.adaptee).camera = <Camera>camera.adaptee;
 	}
 
 	/**
@@ -282,7 +281,7 @@ export class View3D extends Sprite
 
 		this._hitField.width=value;
 		this._localBRPos.x = value + this._localTLPos.x;
-		this._view.width= this.adaptee.parent.localToGlobal(this._localBRPos).x - this._globalPos.x;
+		this._view.width= this.adaptee.parent.transform.localToGlobal(this._localBRPos).x - this._globalPos.x;
 
 	}
 
@@ -299,7 +298,7 @@ export class View3D extends Sprite
 	{
 		this._hitField.height=value;
 		this._localBRPos.y = value + this._localTLPos.y;
-		this._view.height=this.adaptee.parent.localToGlobal(this._localBRPos).y - this._globalPos.y;
+		this._view.height=this.adaptee.parent.transform.localToGlobal(this._localBRPos).y - this._globalPos.y;
 
 	}
 
@@ -311,7 +310,7 @@ export class View3D extends Sprite
 	{
 		this.adaptee.x=value;
 		this._localTLPos.x = value;
-		this._globalPos = this.adaptee.parent.localToGlobal(this._localTLPos);
+		this._globalPos = this.adaptee.parent.transform.localToGlobal(this._localTLPos);
 		this._view.x=this._globalPos.x;
 	}
 
@@ -324,7 +323,7 @@ export class View3D extends Sprite
 	{
 		this.adaptee.y=value;
 		this._localTLPos.y=value;
-		this._globalPos = this.adaptee.parent.localToGlobal(this._localTLPos);
+		this._globalPos = this.adaptee.parent.transform.localToGlobal(this._localTLPos);
 		this._view.y = this._globalPos.y;
 	}
 
@@ -372,7 +371,7 @@ export class View3D extends Sprite
 	 */
 	public render():void
 	{
-		this._view.render();
+		(<Scene><any>this._scene.adaptee).render();
 	}
 
 	/**

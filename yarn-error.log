@@ -1,0 +1,83 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files (x86)\mingw-w64\i686-8.1.0-posix-dwarf-rt_v6-rev0\mingw32\bin\;C:\Program Files\TortoiseHg\;C:\Users\80proW10\AppData\Local\Microsoft\WindowsApps;C:\Users\80proW10\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\80proW10\AppData\Roaming\npm;C:\Users\80proW10\AppData\Local\Yarn\bin;C:\Users\80proW10\.windows-build-tools\python27;
+
+Yarn version: 
+  1.13.0
+
+Node version: 
+  10.15.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, stat 'I:\away2017\@as3web\away3d\node_modules\@awayjs\player'
+
+npm manifest: 
+  {
+    "name": "@as3web/away3d",
+    "version": "0.1.57",
+    "description": "Typescript classes mimicing the functionality of the away3d package in AS3",
+    "main": "bundle/as3web-away3d.umd.js",
+    "types": "dist/index.d.ts",
+    "url": "http://www.as3web.com",
+    "author": "Rob Bateman",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/as3web/away3d.git"
+    },
+    "scripts": {
+      "rimraf": "rimraf",
+      "rollup": "rollup -c",
+      "uglifyjs": "uglifyjs ./bundle/as3web-away3d.umd.js -o ./bundle/as3web-away3d.umd.min.js --in-source-map ./bundle/as3web-away3d.umd.js.map --source-map --output ./bundle/as3web-away3d.umd.min.js.map --mangle",
+      "tsc": "tsc",
+      "clean": "npm cache clean && npm run rimraf -- node_modules dist bundle",
+      "clean:dist": "npm run rimraf -- dist bundle",
+      "watch": "npm run tsc -- --w",
+      "prebuild": "npm run clean:dist",
+      "build": "npm run tsc && npm run rollup && npm run uglifyjs",
+      "version": "npm run build",
+      "postversion": "git push && git push --tags && npm publish"
+    },
+    "keywords": [
+      "AwayJS",
+      "WebGL",
+      "2D",
+      "3D",
+      "graphics"
+    ],
+    "license": "Apache-2.0",
+    "bugs": {
+      "url": "https://github.com/as3web/away3d/issues"
+    },
+    "homepage": "https://github.com/as3web/away3d#readme",
+    "dependencies": {
+      "@as3web/flash": "^0.1.0",
+      "@awayjs/core": "^0.6.0",
+      "@awayjs/graphics": "^0.1.0",
+      "@awayjs/scene": "^0.8.0",
+      "@awayjs/materials": "^0.3.0",
+      "@awayjs/view": "^0.2.0",
+      "@awayjs/renderer": "^0.8.0",
+      "@awayjs/stage": "^0.8.0",
+      "@awayjs/player": "^0.5.16",
+      "@awayjs/parsers": "^0.5.31",
+      "tslib": "github:microsoft/tslib"
+    },
+    "devDependencies": {
+      "rimraf": "^2.5.2",
+      "rollup": "^0.36.4",
+      "rollup-plugin-includepaths": "^0.2.1",
+      "typescript": "2.2.0-dev.20161123",
+      "uglify-js": "^3.0.15"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

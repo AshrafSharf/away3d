@@ -12,6 +12,7 @@ export class RaycastPicker extends AwayJSRaycastPicker
 		var rayPosition:Vector3D = view.unproject(x, y, 0);
 		var rayDirection:Vector3D = view.unproject(x, y, 1).subtract(rayPosition);
 
-		return super.getCollision(rayPosition, rayDirection, view.view);
+		// todo2019: shapeflag true is correct here ?
+		return super.getCollision(rayPosition, rayDirection, true);
 	}
 }
