@@ -376,7 +376,7 @@ export class View3D extends Sprite
 	 */
 	public render():void
 	{
-		//this._scene.render();
+		this._scene.render();
 	}
 
 	/**
