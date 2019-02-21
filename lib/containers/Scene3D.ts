@@ -6,8 +6,8 @@ import { Object3D } from '../core/base/Object3D';
 
 export class Scene3D extends ObjectContainer3D {
 	
-	constructor(renderer:DefaultRenderer){
-		super(new Scene(renderer).root);
+	constructor(renderer:DefaultRenderer, adaptee:DisplayObjectContainer){
+		super(adaptee);
 	}
 
 	public addChild(child:Object3D){

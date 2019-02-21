@@ -1,4 +1,4 @@
-import {Camera, Scene} from "@awayjs/scene";
+import {Camera, DisplayObject, Scene} from "@awayjs/scene";
 import { Sprite, Point, Rectangle, Vector3D, Transform, DisplayObjectContainer } from "@as3web/flash"
 import { View, BasicPartition } from "@awayjs/view";
 import { DefaultRenderer } from "@awayjs/renderer";
@@ -48,7 +48,7 @@ export class View3D extends Sprite
 		//this.adaptee.mouseEnabled=false;
 
 		this._initHitField();
-/*
+		/*
 		this._view = new View(this._renderer);
 		//this._camera = new Camera3D();
 		this._view.camera = <Camera> this._camera.adaptee;
@@ -91,14 +91,17 @@ export class View3D extends Sprite
 		this._stage3DProxy=stage3DProxy;
 		
 		//create the view
+		//this._renderer = new DefaultRenderer(new BasicPartition(new DisplayObjectContainer().adaptee));
 		this._renderer = new DefaultRenderer(new BasicPartition(new DisplayObjectContainer().adaptee), new View(null, stage3DProxy.stage3D));
 		this._renderer.renderableSorter = null;
 
 		this._view = this._renderer.view;
-		this._scene3d = new Scene3D(this._renderer);
 		this._scene=new Scene(this._renderer);
+		
+		this._scene3d = new Scene3D(this._renderer, this._scene.root);
 		this._camera = new Camera3D();
 		this._scene.camera = <Camera> this._camera.adaptee;
+		//this._view.backgroundColor=0x00ff00;
 		//this._view.scene = <Scene> this._scene.adaptee;
 		
 	}
@@ -216,6 +219,7 @@ export class View3D extends Sprite
 
 	public set backgroundColor(value:number)
 	{
+		console.log("this._view.backgroundColor", value);
 		this._view.backgroundColor=value;
 	}
 
@@ -226,6 +230,7 @@ export class View3D extends Sprite
 
 	public set backgroundAlpha(value:number)
 	{
+		console.log("this._view.backgroundAlpha", value);
 		this._view.backgroundAlpha=value;
 	}
 
