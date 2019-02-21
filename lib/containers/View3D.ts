@@ -12,7 +12,8 @@ import { Scene3D } from "./Scene3D";
 // it is important that View3D inherits Sprite from the @as3web/flash package !!!
 export class View3D extends Sprite
 {
-	protected _scene:Scene3D;
+	protected _scene3d:Scene3D;
+	protected _scene:Scene;
 	protected _camera:Camera3D;
 
 	private _view: View;
@@ -93,9 +94,11 @@ export class View3D extends Sprite
 		this._renderer = new DefaultRenderer(new BasicPartition(new DisplayObjectContainer().adaptee), new View(null, stage3DProxy.stage3D));
 		this._renderer.renderableSorter = null;
 
-		this._scene = new Scene3D(this._renderer);
+		this._view = this._renderer.view;
+		this._scene3d = new Scene3D(this._renderer);
+		this._scene=new Scene(this._renderer);
 		this._camera = new Camera3D();
-		(<Scene><any>this._scene.adaptee).camera = <Camera> this._camera.adaptee;
+		this._scene.camera = <Camera> this._camera.adaptee;
 		//this._view.scene = <Scene> this._scene.adaptee;
 		
 	}
@@ -139,22 +142,22 @@ export class View3D extends Sprite
 	 */
 	public get layeredView():boolean
 	{
-		return (<Scene><any>this._scene.adaptee).layeredView;
+		return this._scene.layeredView;
 	}
 
 	public set layeredView(value:boolean)
 	{
-		(<Scene><any>this._scene.adaptee).layeredView=value;
+		this._scene.layeredView=value;
 	}
 
 	public get disableMouseEvents():boolean
 	{
-		return (<Scene><any>this._scene.adaptee).disableMouseEvents;
+		return false;//this._scene.adaptee.disableMouseEvents;
 	}
 
 	public set disableMouseEvents(value:boolean)
 	{
-		(<Scene><any>this._scene.adaptee).disableMouseEvents = value;
+		//this._scene.adaptee.disableMouseEvents = value;
 	}
 
 		/**
@@ -192,12 +195,14 @@ export class View3D extends Sprite
 	public get renderer():any
 	{
 		//todo: any is Rendererbase
+		//return this._renderer;
 		throw("renderer not implemented yet in View3D");
 	}
 
 	public set renderer(value:any)
 	{
 		//todo: any is Rendererbase
+		//this._renderer=value;
 		throw("renderer not implemented yet in View3D");
 	}
 
@@ -238,7 +243,7 @@ export class View3D extends Sprite
 	public set camera(camera:Camera3D)
 	{
 		this._camera = camera;
-		(<Scene><any>this._scene.adaptee).camera = <Camera>camera.adaptee;
+		this._scene.camera = <Camera>camera.adaptee;
 	}
 
 	/**
@@ -246,14 +251,14 @@ export class View3D extends Sprite
 	 */
 	public get scene():Scene3D
 	{
-		return this._scene;
+		return this._scene3d;
 	}
 	/**
 	 * Set the scene that's used to render for this viewport
 	 */
 	public set scene(scene:Scene3D)
 	{
-		this._scene = scene;
+		this._scene3d = scene;
 	}
 
 
@@ -371,7 +376,7 @@ export class View3D extends Sprite
 	 */
 	public render():void
 	{
-		(<Scene><any>this._scene.adaptee).render();
+		//this._scene.render();
 	}
 
 	/**

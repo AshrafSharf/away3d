@@ -12,11 +12,11 @@ export class Scene3D extends ObjectContainer3D {
 
 	public addChild(child:Object3D){
 
-		(<DisplayObjectContainer> (<Scene><any>this._adaptee).root).addChild(<DisplayObject> child.adaptee);
+		(<DisplayObjectContainer> this._adaptee).addChild(<DisplayObject> child.adaptee);
 		return child;
 	}
 	public removeChild(child:Object3D):void
 	{
-		(<DisplayObjectContainer> (<Scene><any>this._adaptee).root).removeChild(<DisplayObject> child.adaptee);
+		(<DisplayObjectContainer> this._adaptee).removeChild(<DisplayObject> child.adaptee);
 	}
 }
